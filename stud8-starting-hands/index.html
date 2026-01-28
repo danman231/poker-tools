@@ -399,13 +399,23 @@
     </div>
 
     <div class="quick-nav">
-      <button class="nav-chip always" onclick="scrollToCategory('always')">Almost Always</button>
-      <button class="nav-chip often" onclick="scrollToCategory('often')">Often Playable</button>
-      <button class="nav-chip sometimes" onclick="scrollToCategory('sometimes')">Sometimes Playable</button>
       <button class="nav-chip always" onclick="scrollToHand('trips')">Trips</button>
       <button class="nav-chip always" onclick="scrollToHand('aces')">Aces</button>
+      <button class="nav-chip always" onclick="scrollToHand('suited-low')">3 Suited Low</button>
+      <button class="nav-chip always" onclick="scrollToHand('wheel-ace')">Wheel w/ Ace</button>
+      <button class="nav-chip always" onclick="scrollToHand('zero-gap')">Zero Gappers</button>
+      <button class="nav-chip always" onclick="scrollToHand('three-six')">3 to a 6</button>
+      <button class="nav-chip often" onclick="scrollToHand('one-gap')">One Gappers</button>
+      <button class="nav-chip often" onclick="scrollToHand('three-seven')">3 to a 7/8</button>
       <button class="nav-chip often" onclick="scrollToHand('kings')">Kings/Queens</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('jacks')">Jacks/Tens</button>
+      <button class="nav-chip often" onclick="scrollToHand('low-pair-ace')">Low Pair + Ace</button>
+      <button class="nav-chip often" onclick="scrollToHand('flush-low')">Flush + 2 Low</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('two-gap')">Two Gappers</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-low')">Low Pair + Low</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('flush-high')">Flush + High</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('jacks')">Jacks/Tens/9s</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-high')">Low Pair + High</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('razz')">Razz Lows</button>
       <button class="nav-chip sometimes" onclick="scrollToHand('steal')">Steals</button>
     </div>
 
@@ -516,14 +526,14 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="suited-low">
             <h4>3 Suited Low Cards</h4>
             <ul>
               <li>If many of your suit is out, you are playing a one way hand.</li>
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="wheel-ace">
             <h4>3 Wheel Cards w/ Ace</h4>
             <ul>
               <li>Close decision if raise or not when someone completed.</li>
@@ -531,7 +541,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="zero-gap">
             <h4>Zero Gappers (No Ace)</h4>
             <ul>
               <li><span class="hand-example">5-6-7</span> and <span class="hand-example">6-7-8</span> can become marginal in multiway pots contested by several low cards. But in heads up pots, these do well and you should get aggressive on 3rd street, especially in a high ante game.</li>
@@ -544,7 +554,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="three-six">
             <h4>3 to a 6 w/ Ace</h4>
             <ul>
               <li>Almost always playable even if a few aces are dead, especially if you hold two suit.</li>
@@ -575,7 +585,7 @@
         <div class="category-inner">
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These are good enough to play around 75% or more of the time.</p>
 
-          <div class="hand-type">
+          <div class="hand-type" id="one-gap">
             <h4>One-Gappers (No Ace)</h4>
             <ul>
               <li>Want your straight draw card to be live.</li>
@@ -587,7 +597,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="three-seven">
             <h4>Three to a 7 or 8 w/ Ace</h4>
             <ul>
               <li>Prefer shorthanded action</li>
@@ -615,14 +625,14 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="low-pair-ace">
             <h4>Low Pair w/ Ace</h4>
             <ul>
               <li>If pair cards are live, hand has lots of value even if you're up against good low draw and a high pair (other than aces) example with <span class="hand-example">A-6-6</span></li>
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="flush-low">
             <h4>Flush Draws w/ 2 Low Cards</h4>
             <ul>
               <li>Multi-way, always important flush outs are very live</li>
@@ -652,7 +662,7 @@
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These hands are only playable in certain 3rd street situations when the board is advantageous to us, we can get heads-up against a weak range, or as a potential ante steal.</p>
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">Marginal hands should make disciplined folds on 3rd or get out early when not improved and it appears opponent has.</p>
 
-          <div class="hand-type">
+          <div class="hand-type" id="two-gap">
             <h4>Two Gappers No Ace</h4>
             <p style="color: #aaa; font-weight: 600; margin: 10px 0;">3 to a 6:</p>
             <ul>
@@ -673,7 +683,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="low-pair-low">
             <h4>Low Pair with Low Kicker (no ace)</h4>
             <ul>
               <li>This is a decent hand & will do relatively well in heads up pots. (Two flush and zero gapper)</li>
@@ -689,7 +699,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="flush-high">
             <h4>Flush Draws w/ 2 or 3 High Cards</h4>
             <ul>
               <li>Drawing hands to half pot need to be very live and have strong potential.</li>
@@ -713,7 +723,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="low-pair-high">
             <h4>Low Pair w/ Higher Kicker (No Ace)</h4>
             <ul>
               <li>This is marginal.</li>
@@ -726,7 +736,7 @@
             </ul>
           </div>
 
-          <div class="hand-type">
+          <div class="hand-type" id="razz">
             <h4>Razz Lows</h4>
             <ul>
               <li>Should not be calling legitimate completes with these hands</li>
