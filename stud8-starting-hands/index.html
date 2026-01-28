@@ -241,40 +241,190 @@
       padding: 0 20px 20px 20px;
     }
 
-    /* Hand Types */
+    /* Hand Cards - New Design */
     .hand-type {
-      margin: 15px 0;
-      padding: 15px;
+      margin: 12px 0;
       background: #1a1a2e;
-      border-radius: 8px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .hand-main {
+      padding: 16px 20px;
+    }
+
+    .hand-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
     }
 
     .hand-type h4 {
       color: #fff;
-      font-size: 1rem;
-      margin-bottom: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .action {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
 
-    .hand-type ul {
-      margin-left: 20px;
+    .action.raise {
+      background: rgba(46, 204, 113, 0.15);
+      color: #2ecc71;
+      border: 1px solid rgba(46, 204, 113, 0.3);
     }
 
-    .hand-type li {
-      margin: 8px 0;
+    .action.call {
+      background: rgba(52, 152, 219, 0.15);
+      color: #3498db;
+      border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+
+    .action.fold {
+      background: rgba(231, 76, 60, 0.15);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .action.caution {
+      background: rgba(241, 196, 15, 0.15);
+      color: #f1c40f;
+      border: 1px solid rgba(241, 196, 15, 0.3);
+    }
+
+    /* Quick Take */
+    .quick-take {
+      background: #252542;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border-left: 3px solid #6c5ce7;
+      font-size: 0.85rem;
+      color: #ccc;
+    }
+
+    .quick-take-text {
+      line-height: 1.5;
+    }
+
+    /* Tier Badges */
+    .tier-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tier-badge.always {
+      background: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+    }
+
+    .tier-badge.often {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
+    }
+
+    .tier-badge.sometimes {
+      background: rgba(230, 126, 34, 0.2);
+      color: #e67e22;
+    }
+
+    .action-icon {
+      font-size: 0.65rem;
+    }
+
+    /* Expandable Notes */
+    .expand-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      background: #1e1e3a;
+      border: none;
+      color: #666;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+      border-top: 1px solid #333;
+    }
+
+    .expand-toggle:hover {
+      background: #252550;
+      color: #888;
+    }
+
+    .expand-toggle .arrow {
+      transition: transform 0.2s;
+    }
+
+    .hand-type.open .expand-toggle .arrow {
+      transform: rotate(180deg);
+    }
+
+    .full-notes {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #151528;
+    }
+
+    .hand-type.open .full-notes {
+      max-height: 800px;
+    }
+
+    .notes-inner {
+      padding: 14px 20px 16px;
+      border-top: 1px solid #333;
+    }
+
+    .notes-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .notes-inner ul {
+      margin-left: 18px;
+    }
+
+    .notes-inner li {
+      margin: 5px 0;
       color: #ccc;
       font-size: 0.9rem;
     }
 
-    .hand-type li ul {
-      margin-top: 5px;
+    .notes-inner li ul {
+      margin-top: 4px;
     }
 
-    .hand-type li ul li {
-      color: #999;
-      font-size: 0.85rem;
+    .notes-inner li ul li {
+      color: #bbb;
     }
 
     .hand-example {
@@ -506,66 +656,186 @@
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These hands are almost always playable from any position regardless of exposed cards and action you face.</p>
 
           <div class="hand-type" id="trips">
-            <h4>Trips</h4>
-            <ul>
-              <li>On 3rd get as much money into the pot as possible.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Trips</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise / Reraise</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Max value on 3rd street. Build the pot.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>On 3rd get as much money into the pot as possible.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="aces">
-            <h4>Two Aces</h4>
-            <ul>
-              <li>Having low kicker preferred</li>
-              <li>If Aces are split or buried, opponent will have hard time knowing which way we are going.</li>
-              <li>Short handed pots will produce more scoops</li>
-              <li>High kickers has less value and when aces are buried, everyone knows we're going high.
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Two Aces</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise to isolate</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Don't reraise multiway w/ high kicker</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Buried + high kicker = obvious high</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Low kicker preferred. Keep it heads-up for scoops. Split/buried aces disguise your hand. High kicker multiway = see 4th street, maybe fold.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
                 <ul>
-                  <li>May not want to reraise if there are many players in the pot. Can see what develops on 4th and maybe make a snug fold.</li>
+                  <li>Having low kicker preferred</li>
+                  <li>If Aces are split or buried, opponent will have hard time knowing which way we are going.</li>
+                  <li>Short handed pots will produce more scoops</li>
+                  <li>High kickers has less value and when aces are buried, everyone knows we're going high.
+                    <ul>
+                      <li>May not want to reraise if there are many players in the pot. Can see what develops on 4th and maybe make a snug fold.</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="suited-low">
-            <h4>3 Suited Low Cards</h4>
-            <ul>
-              <li>If many of your suit is out, you are playing a one way hand.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>3 Suited Low Cards</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (if suit live)</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Dead suit = one-way low only</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Check how many of your suit are out. If many dead, you're playing for low only — loses two-way potential.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>If many of your suit is out, you are playing a one way hand.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="wheel-ace">
-            <h4>3 Wheel Cards w/ Ace</h4>
-            <ul>
-              <li>Close decision if raise or not when someone completed.</li>
-              <li>Lean towards calling in a low ante game and raising in a high ante game to get people to fold out equity or make bad calls on future streets.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>3 Wheel Cards w/ Ace</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action call"><span class="action-icon">&#8226;</span> Call (low ante)</div>
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (high ante)</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Close decision vs complete. Call low ante, raise high ante to fold out equity.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Close decision if raise or not when someone completed.</li>
+                  <li>Lean towards calling in a low ante game and raising in a high ante game to get people to fold out equity or make bad calls on future streets.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="zero-gap">
-            <h4>Zero Gappers (No Ace)</h4>
-            <ul>
-              <li><span class="hand-example">5-6-7</span> and <span class="hand-example">6-7-8</span> can become marginal in multiway pots contested by several low cards. But in heads up pots, these do well and you should get aggressive on 3rd street, especially in a high ante game.</li>
-              <li>Two flush 6-7-8 is 50% against pair of kings and 3 Wheel Cards w/ Ace.</li>
-              <li>Can be dangerous to reraise an Ace, but we have around 55% equity against someone who is completing close to 100% of the time.
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Zero Gappers (No Ace)</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise heads-up (high ante)</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Marginal multiway vs low cards</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Dangerous to reraise Ace (43% vs AA)</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text"><span class="hand-example">5-6-7</span> <span class="hand-example">6-7-8</span> — Great heads-up, marginal multiway. 55% vs wide Ace completer, but only 43% if they have AA.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
                 <ul>
-                  <li>If they have Aces, we have around 43% equity and if the bring in folds 3 low cards we are in better shape.</li>
+                  <li><span class="hand-example">5-6-7</span> and <span class="hand-example">6-7-8</span> can become marginal in multiway pots contested by several low cards. But in heads up pots, these do well and you should get aggressive on 3rd street, especially in a high ante game.</li>
+                  <li>Two flush 6-7-8 is 50% against pair of kings and 3 Wheel Cards w/ Ace.</li>
+                  <li>Can be dangerous to reraise an Ace, but we have around 55% equity against someone who is completing close to 100% of the time.
+                    <ul>
+                      <li>If they have Aces, we have around 43% equity and if the bring in folds 3 low cards we are in better shape.</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="three-six">
-            <h4>3 to a 6 w/ Ace</h4>
-            <ul>
-              <li>Almost always playable even if a few aces are dead, especially if you hold two suit.</li>
-            </ul>
-          </div>
-
-          <div class="hand-type">
-            <h4>3 Wheel Cards One Gapper Without Ace</h4>
-            <ul>
-              <li></li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>3 to a 6 w/ Ace</h4>
+                <span class="tier-badge always">Always</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (even if aces showing)</div>
+                <div class="action raise"><span class="action-icon">&#9650;</span> Two-suited = stronger</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Almost always playable even if a few aces are out. Two-suited hand is even stronger — gives flush backup.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Almost always playable even if a few aces are dead, especially if you hold two suit.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -586,62 +856,170 @@
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These are good enough to play around 75% or more of the time.</p>
 
           <div class="hand-type" id="one-gap">
-            <h4>One-Gappers (No Ace)</h4>
-            <ul>
-              <li>Want your straight draw card to be live.</li>
-              <li>If you have <strong>3 wheel cards</strong> or <strong>3 to a 6</strong> these are playable even with your straight outs dead.</li>
-              <li>The higher one gapper gutter outs need to be live, especially if there are many other small cards contesting the pot.</li>
-              <li>In some situations, there may need to pick up a straight draw on 4th to realize equity.</li>
-              <li><span class="hand-example">8-6-5</span> rainbow is a 53% favorite over <span class="hand-example">2-3-4</span> rainbow and 49% against <span class="hand-example">A-3-4</span> rainbow. This is because more chance to make higher pairs.</li>
-              <li>If low card in a steal position will raise <span class="hand-example">10-4-4</span> or <span class="hand-example">A-J-4</span>, then a reraise has a lot of value as we are equity favorites.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>One-Gappers (No Ace)</h4>
+                <span class="tier-badge often">Often</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Reraise vs steal (equity favorite)</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Straight outs must be live</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> Wheel/3-to-6 OK even if straight dead</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Higher one-gappers need gutter outs live multiway. <span class="hand-example">8-6-5</span> is 53% vs <span class="hand-example">2-3-4</span>. Wheel/3-to-6 one-gappers playable even with straight outs dead.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Want your straight draw card to be live.</li>
+                  <li>If you have <strong>3 wheel cards</strong> or <strong>3 to a 6</strong> these are playable even with your straight outs dead.</li>
+                  <li>The higher one gapper gutter outs need to be live, especially if there are many other small cards contesting the pot.</li>
+                  <li>In some situations, there may need to pick up a straight draw on 4th to realize equity.</li>
+                  <li><span class="hand-example">8-6-5</span> rainbow is a 53% favorite over <span class="hand-example">2-3-4</span> rainbow and 49% against <span class="hand-example">A-3-4</span> rainbow. This is because more chance to make higher pairs.</li>
+                  <li>If low card in a steal position will raise <span class="hand-example">10-4-4</span> or <span class="hand-example">A-J-4</span>, then a reraise has a lot of value as we are equity favorites.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="three-seven">
-            <h4>Three to a 7 or 8 w/ Ace</h4>
-            <ul>
-              <li>Prefer shorthanded action</li>
-              <li>Play aggressively when ace is up</li>
-              <li>Value goes down when aces are dead.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Three to a 7 or 8 w/ Ace</h4>
+                <span class="tier-badge often">Often</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (ace up)</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Loses value if aces dead</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Prefer shorthanded. Aggressive with ace up. Value drops with dead aces.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Prefer shorthanded action</li>
+                  <li>Play aggressively when ace is up</li>
+                  <li>Value goes down when aces are dead.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="kings">
-            <h4>Kings and Queens</h4>
-            <ul>
-              <li>High pairs are good if:
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Kings and Queens</h4>
+                <span class="tier-badge often">Often</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise to isolate</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold vs Ace complete (non-steal)</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold EP w/ Ace + lows behind</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> QQ folds to KK complete</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Heads-up only. Avoid multiway — gets jammed on later streets. Tight folds when Ace upcard behind. Only fold vs straightforward Ace players.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
                 <ul>
-                  <li>exposed cards and action suggests we have best high hand</li>
-                  <li>Pot doesn't go multiway</li>
+                  <li>High pairs are good if:
+                    <ul>
+                      <li>exposed cards and action suggests we have best high hand</li>
+                      <li>Pot doesn't go multiway</li>
+                    </ul>
+                  </li>
+                  <li>Playing against many low cards can get rough and we can get jammed on in later streets.</li>
+                  <li>Should fold against an Ace that completes from a non steal position.</li>
+                  <li>Pair of queens should be folded when a king completes.</li>
+                  <li>Sometimes make tight folds when there is an ace up card behind</li>
+                  <li>In early position, best to fold when ace and many other low cards left to act.</li>
+                  <li>Many opponents with an Ace will reraise many hands that don't currently beat a pair of kings, so only fold to opponents playing straight forward.</li>
+                  <li>Very aggressive players will take off with <span class="hand-example">(2-J)A</span> and pick up pair and small draw along the way. Calling down is high variance, but we need to accept this situation.</li>
                 </ul>
-              </li>
-              <li>Playing against many low cards can get rough and we can get jammed on in later streets.</li>
-              <li>Should fold against an Ace that completes from a non steal position.</li>
-              <li>Pair of queens should be folded when a king completes.</li>
-              <li>Sometimes make tight folds when there is an ace up card behind</li>
-              <li>In early position, best to fold when ace and many other low cards left to act.</li>
-              <li>Many opponents with an Ace will reraise many hands that don't currently beat a pair of kings, so only fold to opponents playing straight forward.</li>
-              <li>Very aggressive players will take off with <span class="hand-example">(2-J)A</span> and pick up pair and small draw along the way. Calling down is high variance, but we need to accept this situation.</li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="low-pair-ace">
-            <h4>Low Pair w/ Ace</h4>
-            <ul>
-              <li>If pair cards are live, hand has lots of value even if you're up against good low draw and a high pair (other than aces) example with <span class="hand-example">A-6-6</span></li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Low Pair w/ Ace</h4>
+                <span class="tier-badge often">Often</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (if pair live)</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text"><span class="hand-example">A-6-6</span> — If pair cards live, strong vs low draws + high pairs (except AA).</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>If pair cards are live, hand has lots of value even if you're up against good low draw and a high pair (other than aces) example with <span class="hand-example">A-6-6</span></li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="flush-low">
-            <h4>Flush Draws w/ 2 Low Cards</h4>
-            <ul>
-              <li>Multi-way, always important flush outs are very live</li>
-              <li>Want to limit the field.</li>
-              <li>With high card up, can represent a big pair when low fails to improve.</li>
-              <li>When opponents low improves, we can make sneaky lows ourself.</li>
-              <li>With low card up, we should get aggressive to knock out raggedy lows that will steal half of pot.</li>
-              <li>Against high pairs, we've got good odds to improve one way or another.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Flush Draws w/ 2 Low Cards</h4>
+                <span class="tier-badge often">Often</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (low up) — knock out raggedy lows</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> High up — can represent big pair</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Flush outs must be very live multiway</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Limit the field. Low up = raise to knock out raggedy lows. High up = represent big pair if low bricks. Good odds vs high pairs.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Multi-way, always important flush outs are very live</li>
+                  <li>Want to limit the field.</li>
+                  <li>With high card up, can represent a big pair when low fails to improve.</li>
+                  <li>When opponents low improves, we can make sneaky lows ourself.</li>
+                  <li>With low card up, we should get aggressive to knock out raggedy lows that will steal half of pot.</li>
+                  <li>Against high pairs, we've got good odds to improve one way or another.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -663,93 +1041,249 @@
           <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">Marginal hands should make disciplined folds on 3rd or get out early when not improved and it appears opponent has.</p>
 
           <div class="hand-type" id="two-gap">
-            <h4>Two Gappers No Ace</h4>
-            <p style="color: #aaa; font-weight: 600; margin: 10px 0;">3 to a 6:</p>
-            <ul>
-              <li>Can always call a single complete and join a multi way pot.</li>
-              <li>Trickier when there is a reraise and our key cards are dead.
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Two Gappers No Ace</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action call"><span class="action-icon">&#8226;</span> 3-to-6: Call single complete multiway</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> 3-to-6: Fold vs reraise if key cards dead</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> 7/8 two-gap: Don't call EP complete</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> 7/8 two-gap: Open-complete LP if clear</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text"><span class="hand-example">2-4-6</span> can call single complete. Muck vs 5 complete + Ace reraise unless two live suits. 7/8 two-gappers marginal (esp. high card exposed) — LP open only.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <p style="color: #aaa; font-weight: 600; margin: 10px 0 8px 0; font-size: 0.8rem;">3 to a 6:</p>
                 <ul>
-                  <li>If a five completes and an ace reraises, a hand such as <span class="hand-example">2-4-6</span> should probably hit the muck, although calling probably isn't too bad if we have two live suits.</li>
+                  <li>Can always call a single complete and join a multi way pot.</li>
+                  <li>Trickier when there is a reraise and our key cards are dead.
+                    <ul>
+                      <li>If a five completes and an ace reraises, a hand such as <span class="hand-example">2-4-6</span> should probably hit the muck, although calling probably isn't too bad if we have two live suits.</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
-            <p style="color: #aaa; font-weight: 600; margin: 10px 0;">Three to a seven or eight two gapper:</p>
-            <ul>
-              <li>Is marginal, especially with highest card exposed.
+                <p style="color: #aaa; font-weight: 600; margin: 10px 0 8px 0; font-size: 0.8rem;">Three to a seven or eight two gapper:</p>
                 <ul>
-                  <li>Most of time don't call complete from early position and can frequently open complete if not too many threatening cards behind us.</li>
+                  <li>Is marginal, especially with highest card exposed.
+                    <ul>
+                      <li>Most of time don't call complete from early position and can frequently open complete if not too many threatening cards behind us.</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="low-pair-low">
-            <h4>Low Pair with Low Kicker (no ace)</h4>
-            <ul>
-              <li>This is a decent hand & will do relatively well in heads up pots. (Two flush and zero gapper)</li>
-              <li>Whether or not to play depends on if our pair outs are live.</li>
-              <li>Get aggressive on 3rd street if pair outs are live.</li>
-              <li>Difficult multiway bc to continue we need to improve and opponents need to brick</li>
-              <li>For a single complete, can enter into a 3 way pot against a probably high hand and low hand bc of implied odds.
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Low Pair with Low Kicker (no ace)</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Raise (if pair outs live)</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> Call single complete 3-way (implied odds)</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold if no improve on 4th</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> <span class="hand-example">4-7-4</span> only steal/defend bring-in</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Best w/ two flush + zero gapper structure. Good heads-up if pair outs live. Difficult multiway — need to improve while opponents brick.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
                 <ul>
-                  <li>If you don't improve on 4th, pitch it.</li>
+                  <li>This is a decent hand & will do relatively well in heads up pots. (Two flush and zero gapper)</li>
+                  <li>Whether or not to play depends on if our pair outs are live.</li>
+                  <li>Get aggressive on 3rd street if pair outs are live.</li>
+                  <li>Difficult multiway bc to continue we need to improve and opponents need to brick</li>
+                  <li>For a single complete, can enter into a 3 way pot against a probably high hand and low hand bc of implied odds.
+                    <ul>
+                      <li>If you don't improve on 4th, pitch it.</li>
+                    </ul>
+                  </li>
+                  <li><span class="hand-example">4-7-4</span> is mediocre should only play when can win uncontested on 3rd or are defending the bring in</li>
                 </ul>
-              </li>
-              <li><span class="hand-example">4-7-4</span> is mediocre should only play when can win uncontested on 3rd or are defending the bring in</li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="flush-high">
-            <h4>Flush Draws w/ 2 or 3 High Cards</h4>
-            <ul>
-              <li>Drawing hands to half pot need to be very live and have strong potential.</li>
-              <li><span class="hand-example">10-Q-K</span> three flush is strong enough to reraise an opponent, if they are not showing an ace.</li>
-              <li>This plays more as a push as want to knock out mediocre lows</li>
-              <li>Since we reraise a pair of kings, we should also do this with a three flush.</li>
-              <li>If you have chance to win uncontested pot on 3rd, your flush outs can afford to be a little dead, especially if you have king up. (Might get queens or jacks to fold)</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Flush Draws w/ 2 or 3 High Cards</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Reraise (if no Ace showing)</div>
+                <div class="action raise"><span class="action-icon">&#9650;</span> K up can win uncontested (folds QQ/JJ)</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Must be very live (unless stealing)</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text"><span class="hand-example">T-Q-K</span> three flush = reraise like KK vs non-ace. Push to knock out mediocre lows. King up can have slightly dead flush outs if stealing.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Drawing hands to half pot need to be very live and have strong potential.</li>
+                  <li><span class="hand-example">10-Q-K</span> three flush is strong enough to reraise an opponent, if they are not showing an ace.</li>
+                  <li>This plays more as a push as want to knock out mediocre lows</li>
+                  <li>Since we reraise a pair of kings, we should also do this with a three flush.</li>
+                  <li>If you have chance to win uncontested pot on 3rd, your flush outs can afford to be a little dead, especially if you have king up. (Might get queens or jacks to fold)</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="jacks">
-            <h4>Jacks, Tens, Nines</h4>
-            <ul>
-              <li>Should fold in early position</li>
-              <li>Mostly playable as open complete when in middle or later position & not many threatening cards behind.</li>
-              <li>Most all cards left to act are a threat. Hand doesn't play well multiway and when a low bricks, they usually catch an overcard to our pair.</li>
-              <li>Fold to a complete from a higher up pair</li>
-              <li>Even if Ace is betting in a steal spot and still bring in left to act, can be dicey.</li>
-              <li>If our kicker is an Ace or another ace already folded, equity goes up and you should reraise.</li>
-              <li>If hand is buried and have a low card up like <span class="hand-example">(J-J)3</span> we can assume more risk.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Jacks, Tens, Nines</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold EP</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold to higher pair complete</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> Open-complete MP/LP (clear board)</div>
+                <div class="action raise"><span class="action-icon">&#9650;</span> Reraise if Ace kicker or Ace folded</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Dicey vs Ace steal w/ bring-in behind</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Most cards are threats. Doesn't play well multiway. Buried <span class="hand-example">(JJ)3</span> can take more risk. When low bricks, they catch overcard to your pair.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Should fold in early position</li>
+                  <li>Mostly playable as open complete when in middle or later position & not many threatening cards behind.</li>
+                  <li>Most all cards left to act are a threat. Hand doesn't play well multiway and when a low bricks, they usually catch an overcard to our pair.</li>
+                  <li>Fold to a complete from a higher up pair</li>
+                  <li>Even if Ace is betting in a steal spot and still bring in left to act, can be dicey.</li>
+                  <li>If our kicker is an Ace or another ace already folded, equity goes up and you should reraise.</li>
+                  <li>If hand is buried and have a low card up like <span class="hand-example">(J-J)3</span> we can assume more risk.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="low-pair-high">
-            <h4>Low Pair w/ Higher Kicker (No Ace)</h4>
-            <ul>
-              <li>This is marginal.</li>
-              <li>If our kicker is higher than some potential pairs that we run into, hand is good enough to play.</li>
-              <li>Ex. If we have <span class="hand-example">(K-6)6</span> and a jack, queen, and 3 are left, we can complete. If we get reraised by a pair of jacks or queens, not too bad. Our hand is hidden and we have implied odds.
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Low Pair w/ Higher Kicker (No Ace)</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action call"><span class="action-icon">&#8226;</span> Complete if kicker beats potential pairs</div>
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold if opponent pairs door card</div>
+                <div class="action caution"><span class="action-icon">&#9888;</span> Marginal hand</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text"><span class="hand-example">(K-6)6</span> — If kicker beats pairs behind (J/Q left), can complete. Hidden trips if you pair door card. Fold if they pair theirs.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
                 <ul>
-                  <li>We have hidden trips if we pair our door card. If he pairs his, we should fold</li>
+                  <li>This is marginal.</li>
+                  <li>If our kicker is higher than some potential pairs that we run into, hand is good enough to play.</li>
+                  <li>Ex. If we have <span class="hand-example">(K-6)6</span> and a jack, queen, and 3 are left, we can complete. If we get reraised by a pair of jacks or queens, not too bad. Our hand is hidden and we have implied odds.
+                    <ul>
+                      <li>We have hidden trips if we pair our door card. If he pairs his, we should fold</li>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="razz">
-            <h4>Razz Lows</h4>
-            <ul>
-              <li>Should not be calling legitimate completes with these hands</li>
-              <li>They are pure stealing hands or defending the bring-in against a wide range.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Razz Lows</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action fold"><span class="action-icon">&#9660;</span> Fold vs legitimate complete</div>
+                <div class="action raise"><span class="action-icon">&#9650;</span> Steal only</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Pure stealing hands or defending bring-in vs wide range. Don't call legitimate completes.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>Should not be calling legitimate completes with these hands</li>
+                  <li>They are pure stealing hands or defending the bring-in against a wide range.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div class="hand-type" id="steal">
-            <h4>Steal Holdings</h4>
-            <ul>
-              <li>These should only be played when we expect to steal successfully or defending the bring in against a late position open.</li>
-              <li>Ace is a powerful up card so we should always consider stealing when we have reasonable hole cards as opponents will tighten up against it and not likely to get reraised.</li>
-            </ul>
+            <div class="hand-main">
+              <div class="hand-header">
+                <h4>Steal Holdings</h4>
+                <span class="tier-badge sometimes">Sometimes</span>
+              </div>
+              <div class="actions">
+                <div class="action raise"><span class="action-icon">&#9650;</span> Steal with Ace up</div>
+                <div class="action call"><span class="action-icon">&#8226;</span> Defend bring-in vs LP</div>
+              </div>
+              <div class="quick-take">
+                <div class="quick-take-text">Ace up = powerful steal card. Opponents tighten up and rarely reraise. Only play to win uncontested.</div>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="this.parentElement.classList.toggle('open')">
+              <span>Full Notes</span>
+              <span class="arrow">&#9660;</span>
+            </button>
+            <div class="full-notes">
+              <div class="notes-inner">
+                <div class="notes-label">Notes</div>
+                <ul>
+                  <li>These should only be played when we expect to steal successfully or defending the bring in against a late position open.</li>
+                  <li>Ace is a powerful up card so we should always consider stealing when we have reasonable hole cards as opponents will tighten up against it and not likely to get reraised.</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
         </div>
