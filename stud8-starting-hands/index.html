@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stud 8 Starting Hands - 3rd Street Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      border-bottom: 1px solid #333;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    .key-insight {
+      background: #2a2a4a;
+      border-left: 4px solid #6c5ce7;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .key-insight p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Search Box */
+    .search-container {
+      position: sticky;
+      top: 0;
+      background: #1a1a2e;
+      padding: 15px 0;
+      z-index: 100;
+      border-bottom: 1px solid #333;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #searchInput {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: #252542;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #searchInput:focus {
+      border-color: #6c5ce7;
+    }
+
+    #searchInput::placeholder {
+      color: #666;
+    }
+
+    .clear-btn {
+      padding: 12px 16px;
+      background: #333;
+      border: none;
+      border-radius: 8px;
+      color: #888;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: #444;
+      color: #fff;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .nav-chip {
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .nav-chip.always {
+      background: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+    }
+
+    .nav-chip.often {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
+    }
+
+    .nav-chip.sometimes {
+      background: rgba(230, 126, 34, 0.2);
+      color: #e67e22;
+    }
+
+    .nav-chip:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.2);
+    }
+
+    /* Categories */
+    .category {
+      margin: 25px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #252542;
+    }
+
+    .category-header {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .category-header:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .category-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .category.always .category-header {
+      border-left: 4px solid #2ecc71;
+    }
+    .category.always .category-badge {
+      background: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+    }
+
+    .category.often .category-header {
+      border-left: 4px solid #f1c40f;
+    }
+    .category.often .category-badge {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
+    }
+
+    .category.sometimes .category-header {
+      border-left: 4px solid #e67e22;
+    }
+    .category.sometimes .category-badge {
+      background: rgba(230, 126, 34, 0.2);
+      color: #e67e22;
+    }
+
+    .category.info .category-header {
+      border-left: 4px solid #6c5ce7;
+    }
+    .category.info .category-badge {
+      background: rgba(108, 92, 231, 0.2);
+      color: #6c5ce7;
+    }
+
+    .chevron {
+      transition: transform 0.3s;
+      color: #666;
+    }
+
+    .category.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .category.open .category-content {
+      max-height: 3000px;
+    }
+
+    .category-inner {
+      padding: 0 20px 20px 20px;
+    }
+
+    /* Hand Types */
+    .hand-type {
+      margin: 15px 0;
+      padding: 15px;
+      background: #1a1a2e;
+      border-radius: 8px;
+    }
+
+    .hand-type h4 {
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hand-type ul {
+      margin-left: 20px;
+    }
+
+    .hand-type li {
+      margin: 8px 0;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .hand-type li ul {
+      margin-top: 5px;
+    }
+
+    .hand-type li ul li {
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    .hand-example {
+      background: #333;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Highlighted search matches */
+    .highlight {
+      background: rgba(241, 196, 15, 0.3);
+      padding: 1px 3px;
+      border-radius: 3px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Low Card Categories List */
+    .low-card-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .low-card-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: #1a1a2e;
+      border-radius: 8px;
+    }
+
+    .low-card-rank {
+      min-width: 24px;
+      height: 24px;
+      background: #6c5ce7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .low-card-info h5 {
+      color: #fff;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .low-card-info p {
+      color: #999;
+      font-size: 0.8rem;
+    }
+
+    /* Keyboard shortcuts */
+    .shortcuts {
+      margin-top: 30px;
+      padding: 15px;
+      background: #252542;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .shortcuts kbd {
+      background: #333;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #fff;
+      margin-right: 5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .quick-nav {
+        gap: 6px;
+      }
+
+      .nav-chip {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .hand-type {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Stud 8 Starting Hands</h1>
+      <p class="subtitle">3rd Street Reference - Kevin Haney</p>
+    </header>
+
+    <div class="key-insight">
+      <p><strong>There are no starting hand charts</strong> because it is based on exposed cards and action at the table.</p>
+      <p>You are dealt 3 unpaired low cards 1 of 6 hands dealt.</p>
+    </div>
+
+    <div class="search-container">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search hands, situations, advice... (press / to focus)">
+        <button class="clear-btn" onclick="clearSearch()">Clear</button>
+      </div>
+    </div>
+
+    <div class="quick-nav">
+      <button class="nav-chip always" onclick="scrollToCategory('always')">Almost Always</button>
+      <button class="nav-chip often" onclick="scrollToCategory('often')">Often Playable</button>
+      <button class="nav-chip sometimes" onclick="scrollToCategory('sometimes')">Sometimes Playable</button>
+      <button class="nav-chip always" onclick="scrollToHand('trips')">Trips</button>
+      <button class="nav-chip always" onclick="scrollToHand('aces')">Aces</button>
+      <button class="nav-chip often" onclick="scrollToHand('kings')">Kings/Queens</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('jacks')">Jacks/Tens</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('steal')">Steals</button>
+    </div>
+
+    <!-- 3 Low Card Categories -->
+    <div class="category info open" id="low-cards">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-title">
+          <span class="category-badge">Reference</span>
+          3 Low Card Hand Categories
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="category-content">
+        <div class="category-inner">
+          <div class="low-card-list">
+            <div class="low-card-item">
+              <div class="low-card-rank">1</div>
+              <div class="low-card-info">
+                <h5>3 Wheel Cards w/ Ace</h5>
+                <p>Can pair ace, pick up strong low, and make wheel</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">2</div>
+              <div class="low-card-info">
+                <h5>Zero Gappers</h5>
+                <p>Pickup straight potential with low draw</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">3</div>
+              <div class="low-card-info">
+                <h5>Three to a Six w/ Ace</h5>
+                <p>Good heads up and multiway</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">4</div>
+              <div class="low-card-info">
+                <h5>One Gappers</h5>
+                <p></p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">5</div>
+              <div class="low-card-info">
+                <h5>Three to a Seven</h5>
+                <p>Lose value in multiway pots</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">6</div>
+              <div class="low-card-info">
+                <h5>Eight w/ Ace</h5>
+                <p>Can become a mediocre one way hand when Aces are dead. Lose value in multiway pots.</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">7</div>
+              <div class="low-card-info">
+                <h5>Two Gappers</h5>
+                <p>Less valuable than no and one gappers. Can only hope to pick up a gut shot on 4th street.</p>
+              </div>
+            </div>
+            <div class="low-card-item">
+              <div class="low-card-rank">8</div>
+              <div class="low-card-info">
+                <h5>Razz Low</h5>
+                <p>3 flush razz low is a strong hand. 2-6-7 two flush is an overplayed hand though.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Almost Always Playable -->
+    <div class="category always open" id="always">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-title">
+          <span class="category-badge">Almost Always</span>
+          Almost Always Playable Holdings
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="category-content">
+        <div class="category-inner">
+          <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These hands are almost always playable from any position regardless of exposed cards and action you face.</p>
+
+          <div class="hand-type" id="trips">
+            <h4>Trips</h4>
+            <ul>
+              <li>On 3rd get as much money into the pot as possible.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type" id="aces">
+            <h4>Two Aces</h4>
+            <ul>
+              <li>Having low kicker preferred</li>
+              <li>If Aces are split or buried, opponent will have hard time knowing which way we are going.</li>
+              <li>Short handed pots will produce more scoops</li>
+              <li>High kickers has less value and when aces are buried, everyone knows we're going high.
+                <ul>
+                  <li>May not want to reraise if there are many players in the pot. Can see what develops on 4th and maybe make a snug fold.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>3 Suited Low Cards</h4>
+            <ul>
+              <li>If many of your suit is out, you are playing a one way hand.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>3 Wheel Cards w/ Ace</h4>
+            <ul>
+              <li>Close decision if raise or not when someone completed.</li>
+              <li>Lean towards calling in a low ante game and raising in a high ante game to get people to fold out equity or make bad calls on future streets.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Zero Gappers (No Ace)</h4>
+            <ul>
+              <li><span class="hand-example">5-6-7</span> and <span class="hand-example">6-7-8</span> can become marginal in multiway pots contested by several low cards. But in heads up pots, these do well and you should get aggressive on 3rd street, especially in a high ante game.</li>
+              <li>Two flush 6-7-8 is 50% against pair of kings and 3 Wheel Cards w/ Ace.</li>
+              <li>Can be dangerous to reraise an Ace, but we have around 55% equity against someone who is completing close to 100% of the time.
+                <ul>
+                  <li>If they have Aces, we have around 43% equity and if the bring in folds 3 low cards we are in better shape.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>3 to a 6 w/ Ace</h4>
+            <ul>
+              <li>Almost always playable even if a few aces are dead, especially if you hold two suit.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>3 Wheel Cards One Gapper Without Ace</h4>
+            <ul>
+              <li></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Often Playable -->
+    <div class="category often" id="often">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-title">
+          <span class="category-badge">Often</span>
+          Often Playable Hands
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="category-content">
+        <div class="category-inner">
+          <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These are good enough to play around 75% or more of the time.</p>
+
+          <div class="hand-type">
+            <h4>One-Gappers (No Ace)</h4>
+            <ul>
+              <li>Want your straight draw card to be live.</li>
+              <li>If you have <strong>3 wheel cards</strong> or <strong>3 to a 6</strong> these are playable even with your straight outs dead.</li>
+              <li>The higher one gapper gutter outs need to be live, especially if there are many other small cards contesting the pot.</li>
+              <li>In some situations, there may need to pick up a straight draw on 4th to realize equity.</li>
+              <li><span class="hand-example">8-6-5</span> rainbow is a 53% favorite over <span class="hand-example">2-3-4</span> rainbow and 49% against <span class="hand-example">A-3-4</span> rainbow. This is because more chance to make higher pairs.</li>
+              <li>If low card in a steal position will raise <span class="hand-example">10-4-4</span> or <span class="hand-example">A-J-4</span>, then a reraise has a lot of value as we are equity favorites.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Three to a 7 or 8 w/ Ace</h4>
+            <ul>
+              <li>Prefer shorthanded action</li>
+              <li>Play aggressively when ace is up</li>
+              <li>Value goes down when aces are dead.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type" id="kings">
+            <h4>Kings and Queens</h4>
+            <ul>
+              <li>High pairs are good if:
+                <ul>
+                  <li>exposed cards and action suggests we have best high hand</li>
+                  <li>Pot doesn't go multiway</li>
+                </ul>
+              </li>
+              <li>Playing against many low cards can get rough and we can get jammed on in later streets.</li>
+              <li>Should fold against an Ace that completes from a non steal position.</li>
+              <li>Pair of queens should be folded when a king completes.</li>
+              <li>Sometimes make tight folds when there is an ace up card behind</li>
+              <li>In early position, best to fold when ace and many other low cards left to act.</li>
+              <li>Many opponents with an Ace will reraise many hands that don't currently beat a pair of kings, so only fold to opponents playing straight forward.</li>
+              <li>Very aggressive players will take off with <span class="hand-example">(2-J)A</span> and pick up pair and small draw along the way. Calling down is high variance, but we need to accept this situation.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Low Pair w/ Ace</h4>
+            <ul>
+              <li>If pair cards are live, hand has lots of value even if you're up against good low draw and a high pair (other than aces) example with <span class="hand-example">A-6-6</span></li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Flush Draws w/ 2 Low Cards</h4>
+            <ul>
+              <li>Multi-way, always important flush outs are very live</li>
+              <li>Want to limit the field.</li>
+              <li>With high card up, can represent a big pair when low fails to improve.</li>
+              <li>When opponents low improves, we can make sneaky lows ourself.</li>
+              <li>With low card up, we should get aggressive to knock out raggedy lows that will steal half of pot.</li>
+              <li>Against high pairs, we've got good odds to improve one way or another.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Sometimes Playable -->
+    <div class="category sometimes" id="sometimes">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-title">
+          <span class="category-badge">Sometimes</span>
+          Sometimes Playable Hands
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="category-content">
+        <div class="category-inner">
+          <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">These hands are only playable in certain 3rd street situations when the board is advantageous to us, we can get heads-up against a weak range, or as a potential ante steal.</p>
+          <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">Marginal hands should make disciplined folds on 3rd or get out early when not improved and it appears opponent has.</p>
+
+          <div class="hand-type">
+            <h4>Two Gappers No Ace</h4>
+            <p style="color: #aaa; font-weight: 600; margin: 10px 0;">3 to a 6:</p>
+            <ul>
+              <li>Can always call a single complete and join a multi way pot.</li>
+              <li>Trickier when there is a reraise and our key cards are dead.
+                <ul>
+                  <li>If a five completes and an ace reraises, a hand such as <span class="hand-example">2-4-6</span> should probably hit the muck, although calling probably isn't too bad if we have two live suits.</li>
+                </ul>
+              </li>
+            </ul>
+            <p style="color: #aaa; font-weight: 600; margin: 10px 0;">Three to a seven or eight two gapper:</p>
+            <ul>
+              <li>Is marginal, especially with highest card exposed.
+                <ul>
+                  <li>Most of time don't call complete from early position and can frequently open complete if not too many threatening cards behind us.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Low Pair with Low Kicker (no ace)</h4>
+            <ul>
+              <li>This is a decent hand & will do relatively well in heads up pots. (Two flush and zero gapper)</li>
+              <li>Whether or not to play depends on if our pair outs are live.</li>
+              <li>Get aggressive on 3rd street if pair outs are live.</li>
+              <li>Difficult multiway bc to continue we need to improve and opponents need to brick</li>
+              <li>For a single complete, can enter into a 3 way pot against a probably high hand and low hand bc of implied odds.
+                <ul>
+                  <li>If you don't improve on 4th, pitch it.</li>
+                </ul>
+              </li>
+              <li><span class="hand-example">4-7-4</span> is mediocre should only play when can win uncontested on 3rd or are defending the bring in</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Flush Draws w/ 2 or 3 High Cards</h4>
+            <ul>
+              <li>Drawing hands to half pot need to be very live and have strong potential.</li>
+              <li><span class="hand-example">10-Q-K</span> three flush is strong enough to reraise an opponent, if they are not showing an ace.</li>
+              <li>This plays more as a push as want to knock out mediocre lows</li>
+              <li>Since we reraise a pair of kings, we should also do this with a three flush.</li>
+              <li>If you have chance to win uncontested pot on 3rd, your flush outs can afford to be a little dead, especially if you have king up. (Might get queens or jacks to fold)</li>
+            </ul>
+          </div>
+
+          <div class="hand-type" id="jacks">
+            <h4>Jacks, Tens, Nines</h4>
+            <ul>
+              <li>Should fold in early position</li>
+              <li>Mostly playable as open complete when in middle or later position & not many threatening cards behind.</li>
+              <li>Most all cards left to act are a threat. Hand doesn't play well multiway and when a low bricks, they usually catch an overcard to our pair.</li>
+              <li>Fold to a complete from a higher up pair</li>
+              <li>Even if Ace is betting in a steal spot and still bring in left to act, can be dicey.</li>
+              <li>If our kicker is an Ace or another ace already folded, equity goes up and you should reraise.</li>
+              <li>If hand is buried and have a low card up like <span class="hand-example">(J-J)3</span> we can assume more risk.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Low Pair w/ Higher Kicker (No Ace)</h4>
+            <ul>
+              <li>This is marginal.</li>
+              <li>If our kicker is higher than some potential pairs that we run into, hand is good enough to play.</li>
+              <li>Ex. If we have <span class="hand-example">(K-6)6</span> and a jack, queen, and 3 are left, we can complete. If we get reraised by a pair of jacks or queens, not too bad. Our hand is hidden and we have implied odds.
+                <ul>
+                  <li>We have hidden trips if we pair our door card. If he pairs his, we should fold</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hand-type">
+            <h4>Razz Lows</h4>
+            <ul>
+              <li>Should not be calling legitimate completes with these hands</li>
+              <li>They are pure stealing hands or defending the bring-in against a wide range.</li>
+            </ul>
+          </div>
+
+          <div class="hand-type" id="steal">
+            <h4>Steal Holdings</h4>
+            <ul>
+              <li>These should only be played when we expect to steal successfully or defending the bring in against a late position open.</li>
+              <li>Ace is a powerful up card so we should always consider stealing when we have reasonable hole cards as opponents will tighten up against it and not likely to get reraised.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="shortcuts">
+      <strong>Keyboard Shortcuts:</strong>
+      <kbd>/</kbd> Focus search &nbsp;|&nbsp;
+      <kbd>Esc</kbd> Clear search &nbsp;|&nbsp;
+      <kbd>1</kbd> Always &nbsp;|&nbsp;
+      <kbd>2</kbd> Often &nbsp;|&nbsp;
+      <kbd>3</kbd> Sometimes
+    </div>
+
+  </div>
+
+  <script>
+    function toggleCategory(header) {
+      const category = header.parentElement;
+      category.classList.toggle('open');
+    }
+
+    function scrollToCategory(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('open');
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function scrollToHand(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        // Open parent category
+        const category = el.closest('.category');
+        if (category) category.classList.add('open');
+
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.style.outline = '2px solid #6c5ce7';
+          setTimeout(() => el.style.outline = 'none', 2000);
+        }, 100);
+      }
+    }
+
+    const searchInput = document.getElementById('searchInput');
+
+    function clearSearch() {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.focus();
+    }
+
+    function performSearch(query) {
+      const allHandTypes = document.querySelectorAll('.hand-type, .low-card-item');
+      const allCategories = document.querySelectorAll('.category');
+
+      // Remove existing highlights
+      document.querySelectorAll('.highlight').forEach(el => {
+        el.outerHTML = el.innerHTML;
+      });
+
+      if (!query.trim()) {
+        // Show everything
+        allHandTypes.forEach(el => el.classList.remove('hidden'));
+        allCategories.forEach(el => el.classList.remove('hidden'));
+        return;
+      }
+
+      const lowerQuery = query.toLowerCase();
+
+      allCategories.forEach(category => {
+        let hasMatch = false;
+        const handTypes = category.querySelectorAll('.hand-type, .low-card-item');
+
+        handTypes.forEach(handType => {
+          const text = handType.textContent.toLowerCase();
+          if (text.includes(lowerQuery)) {
+            handType.classList.remove('hidden');
+            hasMatch = true;
+            category.classList.add('open');
+
+            // Highlight matches
+            highlightText(handType, query);
+          } else {
+            handType.classList.add('hidden');
+          }
+        });
+
+        if (hasMatch) {
+          category.classList.remove('hidden');
+        } else {
+          category.classList.add('hidden');
+        }
+      });
+    }
+
+    function highlightText(element, query) {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+      const textNodes = [];
+
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+      textNodes.forEach(node => {
+        if (regex.test(node.textContent)) {
+          const span = document.createElement('span');
+          span.innerHTML = node.textContent.replace(regex, '<span class="highlight">$1</span>');
+          node.parentNode.replaceChild(span, node);
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      performSearch(e.target.value);
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Don't trigger if already focused on input
+      if (document.activeElement === searchInput) {
+        if (e.key === 'Escape') {
+          clearSearch();
+          searchInput.blur();
+        }
+        return;
+      }
+
+      switch(e.key) {
+        case '/':
+          e.preventDefault();
+          searchInput.focus();
+          break;
+        case '1':
+          scrollToCategory('always');
+          break;
+        case '2':
+          scrollToCategory('often');
+          break;
+        case '3':
+          scrollToCategory('sometimes');
+          break;
+        case 'Escape':
+          clearSearch();
+          break;
+      }
+    });
+  </script>
+</body>
+</html>

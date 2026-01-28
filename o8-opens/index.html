@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O8 Six-Max Opens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #121212;
+      --bg-elevated: #1a1a1a;
+      --surface: #242424;
+      --surface-hover: #2a2a2a;
+      --border: #333;
+      --border-strong: #444;
+
+      --text: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+
+      --accent: #60a5fa;
+      --accent-dim: #3b82f6;
+
+      --pos-lj: #60a5fa;
+      --pos-lj-bg: rgba(96, 165, 250, 0.1);
+      --pos-hj: #a78bfa;
+      --pos-hj-bg: rgba(167, 139, 250, 0.1);
+      --pos-co: #f472b6;
+      --pos-co-bg: rgba(244, 114, 182, 0.1);
+      --pos-bu: #fb923c;
+      --pos-bu-bg: rgba(251, 146, 60, 0.1);
+
+      --all-bg: rgba(34, 197, 94, 0.2);
+      --all-text: #4ade80;
+      --all-border: rgba(34, 197, 94, 0.4);
+
+      --none-text: #ef4444;
+
+      --specific-bg: rgba(250, 204, 21, 0.15);
+      --specific-text: #fcd34d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Legend Bar */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .legend-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .legend-badge.all { background: var(--all-bg); color: var(--all-text); border: 1px solid var(--all-border); }
+    .legend-badge.none { color: var(--none-text); opacity: 0.7; }
+    .legend-badge.specific { background: var(--specific-bg); color: var(--specific-text); }
+
+    .legend-text {
+      color: var(--text-secondary);
+    }
+
+    /* Notation Toggle */
+    .notation-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .notation-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .notation-toggle svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .notation-toggle.open svg {
+      transform: rotate(180deg);
+    }
+
+    /* Notation Panel */
+    .notation-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--surface);
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .notation-panel.open {
+      max-height: 800px;
+      border: 1px solid var(--border);
+    }
+
+    .notation-content {
+      padding: 1.5rem;
+    }
+
+    .notation-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .notation-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .notation-section h3 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem 2rem;
+    }
+
+    .notation-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .notation-item code {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--accent);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .notation-item span {
+      color: var(--text-secondary);
+    }
+
+    .examples-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .example-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent-dim);
+    }
+
+    .example-item code {
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .example-item .desc {
+      color: var(--text-secondary);
+    }
+
+    /* Position Filter */
+    .position-filter {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pos-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.6rem 1.25rem;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-width: 70px;
+    }
+
+    .pos-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border-color: var(--border-strong);
+    }
+
+    .pos-btn.active {
+      border-color: var(--accent);
+      background: rgba(96, 165, 250, 0.1);
+    }
+
+    .pos-btn .label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pos-btn.lj .label { color: var(--pos-lj); }
+    .pos-btn.hj .label { color: var(--pos-hj); }
+    .pos-btn.co .label { color: var(--pos-co); }
+    .pos-btn.bu .label { color: var(--pos-bu); }
+
+    .pos-btn .desc {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--bg-elevated);
+      padding: 0.35rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .tab.active {
+      background: var(--surface);
+      color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Table Container */
+    .table-container {
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+
+    .table-wrapper {
+      display: none;
+    }
+
+    .table-wrapper.active {
+      display: block;
+    }
+
+    /* Rows */
+    .row {
+      display: grid;
+      grid-template-columns: minmax(200px, 1.5fr) repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s ease;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .row:hover {
+      background: var(--surface-hover);
+    }
+
+    .row.header {
+      background: var(--bg-elevated);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .row.header:hover {
+      background: var(--bg-elevated);
+    }
+
+    .cell {
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      min-height: 60px;
+    }
+
+    .cell.hand-type {
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: rgba(0,0,0,0.2);
+      border-right: 1px solid var(--border);
+    }
+
+    .cell.pos {
+      justify-content: center;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .cell.pos:last-child {
+      border-right: none;
+    }
+
+    /* Position column backgrounds */
+    .cell.pos.lj { background: var(--pos-lj-bg); }
+    .cell.pos.hj { background: var(--pos-hj-bg); }
+    .cell.pos.co { background: var(--pos-co-bg); }
+    .cell.pos.bu { background: var(--pos-bu-bg); }
+
+    .row:hover .cell.pos.lj { background: rgba(96, 165, 250, 0.18); }
+    .row:hover .cell.pos.hj { background: rgba(167, 139, 250, 0.18); }
+    .row:hover .cell.pos.co { background: rgba(244, 114, 182, 0.18); }
+    .row:hover .cell.pos.bu { background: rgba(251, 146, 60, 0.18); }
+
+    /* Header cells */
+    .cell.header-cell {
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      min-height: 50px;
+      justify-content: center;
+    }
+
+    .cell.header-cell.lj { color: var(--pos-lj); }
+    .cell.header-cell.hj { color: var(--pos-hj); }
+    .cell.header-cell.co { color: var(--pos-co); }
+    .cell.header-cell.bu { color: var(--pos-bu); }
+
+    /* Value styling */
+    .value {
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .value.all {
+      background: var(--all-bg);
+      color: var(--all-text);
+      border: 1px solid var(--all-border);
+    }
+
+    .value.none {
+      color: var(--none-text);
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .value.specific {
+      background: var(--specific-bg);
+      color: var(--specific-text);
+      font-size: 0.8rem;
+    }
+
+    /* Single position mode */
+    body.single-pos .cell.pos {
+      display: none;
+    }
+
+    body.single-pos .cell.pos.visible {
+      display: flex;
+    }
+
+    body.single-pos .row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Keyboard hints */
+    .keyboard-hints {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-right: 4px;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .row {
+        grid-template-columns: minmax(140px, 1fr) repeat(4, 1fr);
+      }
+
+      .cell {
+        padding: 0.75rem;
+      }
+
+      .cell.hand-type {
+        font-size: 0.8rem;
+      }
+
+      .value {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.4rem;
+      }
+
+      .notation-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .legend-bar {
+        gap: 0.75rem;
+      }
+
+      .position-filter {
+        gap: 0.35rem;
+      }
+
+      .pos-btn {
+        padding: 0.5rem 0.75rem;
+        min-width: 60px;
+      }
+
+      .tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+      }
+
+      .row {
+        grid-template-columns: minmax(100px, 1fr) repeat(4, 1fr);
+      }
+
+      .cell.hand-type {
+        font-size: 0.7rem;
+      }
+
+      .value {
+        font-size: 0.65rem;
+      }
+
+      .keyboard-hints {
+        display: none;
+      }
+
+      .notation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">O8</div>
+        <div>
+          <h1>Opening Ranges</h1>
+          <p class="subtitle">Six-Max Low-Oriented</p>
+        </div>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-item">
+          <span class="legend-badge all">ALL</span>
+          <span class="legend-text">Open all combos</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-badge none">NONE</span>
+          <span class="legend-text">Don't open</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-badge specific">TT+</span>
+          <span class="legend-text">Specific combos only</span>
+        </div>
+        <button class="notation-toggle" onclick="toggleNotation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          Notation Guide
+        </button>
+      </div>
+
+      <div class="notation-panel" id="notationPanel">
+        <div class="notation-content">
+          <div class="notation-section">
+            <h3>Positions</h3>
+            <div class="notation-grid">
+              <div class="notation-item"><code>LJ</code> <span>Lojack (UTG in 6-max)</span></div>
+              <div class="notation-item"><code>HJ</code> <span>Hijack</span></div>
+              <div class="notation-item"><code>CO</code> <span>Cutoff</span></div>
+              <div class="notation-item"><code>BU</code> <span>Button</span></div>
+            </div>
+          </div>
+
+          <div class="notation-section">
+            <h3>Hand Notation</h3>
+            <div class="notation-grid">
+              <div class="notation-item"><code>B</code> <span>Broadway card (T, J, Q, K, A)</span></div>
+              <div class="notation-item"><code>DS</code> <span>Double suited</span></div>
+              <div class="notation-item"><code>PP</code> <span>Pocket pair</span></div>
+              <div class="notation-item"><code>X</code> <span>Any random card</span></div>
+              <div class="notation-item"><code>(XY)</code> <span>Cards in parentheses are suited together</span></div>
+              <div class="notation-item"><code>T</code> <span>Ten</span></div>
+              <div class="notation-item"><code>+</code> <span>That card or higher / that pair or better</span></div>
+              <div class="notation-item"><code>(s)</code> <span>Suited with the Ace</span></div>
+            </div>
+          </div>
+
+          <div class="notation-section">
+            <h3>Examples</h3>
+            <div class="examples-grid">
+              <div class="example-item">
+                <code>A2(2X)</code>
+                <span class="desc">Ace-deuce with the deuce suited to a random card</span>
+              </div>
+              <div class="example-item">
+                <code>A(4J)J+</code>
+                <span class="desc">Ace-four with JJ+, where the 4 and one Jack are suited. JJ+ means Jacks or better (JJ, QQ, KK, AA)</span>
+              </div>
+              <div class="example-item">
+                <code>(A4)5B</code>
+                <span class="desc">Ace-four suited together, with a 5 and a Broadway card</span>
+              </div>
+              <div class="example-item">
+                <code>44-55(s)</code>
+                <span class="desc">Pocket fours or fives, suited with another card (typically the Ace)</span>
+              </div>
+              <div class="example-item">
+                <code>TT+</code>
+                <span class="desc">Tens or better as a pocket pair (TT, JJ, QQ, KK, AA)</span>
+              </div>
+              <div class="example-item">
+                <code>T+</code>
+                <span class="desc">Ten or higher as a single card (T, J, Q, K, A)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="position-filter">
+      <button class="pos-btn lj active" onclick="filterPosition('all')">
+        <span class="label">All</span>
+        <span class="desc">Positions</span>
+      </button>
+      <button class="pos-btn lj" onclick="filterPosition('lj')">
+        <span class="label">LJ</span>
+        <span class="desc">Lojack</span>
+      </button>
+      <button class="pos-btn hj" onclick="filterPosition('hj')">
+        <span class="label">HJ</span>
+        <span class="desc">Hijack</span>
+      </button>
+      <button class="pos-btn co" onclick="filterPosition('co')">
+        <span class="label">CO</span>
+        <span class="desc">Cutoff</span>
+      </button>
+      <button class="pos-btn bu" onclick="filterPosition('bu')">
+        <span class="label">BU</span>
+        <span class="desc">Button</span>
+      </button>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab active" onclick="showTab('a2')">A-2</button>
+      <button class="tab" onclick="showTab('a3')">A-3</button>
+      <button class="tab" onclick="showTab('a4')">A-4</button>
+      <button class="tab" onclick="showTab('a5')">A-5</button>
+      <button class="tab" onclick="showTab('23')">2-3</button>
+    </nav>
+
+    <div class="table-container">
+      <!-- A2 Hands -->
+      <div class="table-wrapper active" id="tab-a2">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell lj">LJ</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A2BB</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">DS Unpaired</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Suited Ace Unpaired</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Other Suit Unpaired</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">No Suits Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">No A247, A248, A257-A289</span></div>
+          <div class="cell pos hj"><span class="value specific">No A2 w/68-79</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A2PP w/ Suited A or DS</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A2 99+</div>
+          <div class="cell pos lj"><span class="value specific">TT+</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A2 Small Pair</div>
+          <div class="cell pos lj"><span class="value specific">33-55, 66-88(s)</span></div>
+          <div class="cell pos hj"><span class="value specific">33-66, 77(s), 88(s)</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A22X</div>
+          <div class="cell pos lj"><span class="value specific">3,4,K</span></div>
+          <div class="cell pos hj"><span class="value specific">3,4,5,T,J,Q,K</span></div>
+          <div class="cell pos co"><span class="value specific">3-6,T-K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A2(2X)</div>
+          <div class="cell pos lj"><span class="value specific">3,4,5,T,J,Q,K</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+      </div>
+
+      <!-- A3 Hands -->
+      <div class="table-wrapper" id="tab-a3">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell lj">LJ</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A3BB</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">DS Unpaired</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Suited Ace Unpaired</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Other Suit Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">No A(3X)X; XX = 6-9</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">No Suits Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">A34T+, A35Q+, A36K</span></div>
+          <div class="cell pos hj"><span class="value specific">A345, A35T+, A36T+</span></div>
+          <div class="cell pos co"><span class="value specific">No A3XX; XX = 6-9</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A3PP w/ Suited A or DS</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A3 99+</div>
+          <div class="cell pos lj"><span class="value specific">TT+</span></div>
+          <div class="cell pos hj"><span class="value specific">TT+, 99(s)</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A3 Small Pair</div>
+          <div class="cell pos lj"><span class="value specific">44-55(s)</span></div>
+          <div class="cell pos hj"><span class="value specific">44, 55-88(s)</span></div>
+          <div class="cell pos co"><span class="value specific">44-66, 77-88(s)</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A33X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">4,K</span></div>
+          <div class="cell pos co"><span class="value specific">4,5,Q,K</span></div>
+          <div class="cell pos bu"><span class="value specific">No 8,9</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A3(3X)</div>
+          <div class="cell pos lj"><span class="value specific">4,5,Q,K</span></div>
+          <div class="cell pos hj"><span class="value specific">4,5,6,T,J,Q,K</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+      </div>
+
+      <!-- A4 Hands -->
+      <div class="table-wrapper" id="tab-a4">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell lj">LJ</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(A4)BB or DS</div>
+          <div class="cell pos lj"><span class="value all">ALL</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A(4B)B</div>
+          <div class="cell pos lj"><span class="value specific">QJ, KJ, KQ</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A4BB</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">DS Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">No (A4)(XX); XX=7-9</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Suited Ace Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">(A4)5B, (A4)6B</span></div>
+          <div class="cell pos hj"><span class="value specific">No (A4)XX; XX=6-9</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Other Suit Unpaired</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">A(45)B, A4(6B)</span></div>
+          <div class="cell pos co"><span class="value specific">No A(4X)X; XX=6-9</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">No Suits Unpaired</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">A45K</span></div>
+          <div class="cell pos co"><span class="value specific">A45B, A46Q+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A4PP w/ Suited A or DS</div>
+          <div class="cell pos lj"><span class="value specific">ALL DS, (A4)TT+</span></div>
+          <div class="cell pos hj"><span class="value specific">ALL DS, (A4)TT+</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A4 99+</div>
+          <div class="cell pos lj"><span class="value specific">A(4J)J+, A4QQ+</span></div>
+          <div class="cell pos hj"><span class="value specific">A(4T)T+, A4JJ+</span></div>
+          <div class="cell pos co"><span class="value specific">A(4T)T+, A4TT+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A4 Small Pair</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">A(45)5, A(46)6</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A44X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">5,6,J-K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A4(4X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">K</span></div>
+          <div class="cell pos co"><span class="value specific">5,6,J,Q,K</span></div>
+          <div class="cell pos bu"><span class="value specific">No 9</span></div>
+        </div>
+      </div>
+
+      <!-- A5 Hands -->
+      <div class="table-wrapper" id="tab-a5">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell lj">UTG</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(A5)BB or DS</div>
+          <div class="cell pos lj"><span class="value specific">ALL DS, (A5)KQ</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A(5B)B</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">KQ</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A5BB</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">KQ</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">DS Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">(A5)(X w/ J,Q,K)</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Suited Ace Unpaired</div>
+          <div class="cell pos lj"><span class="value specific">(A5)6K</span></div>
+          <div class="cell pos hj"><span class="value specific">(A5)6Q+, (A5)7J+</span></div>
+          <div class="cell pos co"><span class="value specific">ALL (A5)XX Except 68-89</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">Other Suit Unpaired</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">A5(6Q+), A5(7K), A(56)K</span></div>
+          <div class="cell pos co"><span class="value specific">A5(6J+), A5(7Q+), A(56)J+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">No Suits Unpaired</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">A56K</span></div>
+          <div class="cell pos bu"><span class="value specific">ALL A5XX Except 68-89</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A5PP w/ Suited Ace or DS</div>
+          <div class="cell pos lj"><span class="value specific">(AT)(5T)+, (A5)JJ+</span></div>
+          <div class="cell pos hj"><span class="value specific">ALL DS, (A5)TT+</span></div>
+          <div class="cell pos co"><span class="value specific">ALL Except (A5)77-99</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A5 99+</div>
+          <div class="cell pos lj"><span class="value specific">A(5Q)Q+, A5KK</span></div>
+          <div class="cell pos hj"><span class="value specific">A(5J)J+, A5QQ+</span></div>
+          <div class="cell pos co"><span class="value specific">(A5T)T+, A5JJ+</span></div>
+          <div class="cell pos bu"><span class="value specific">A(59)9+, A5TT+</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A5 Small Pair</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">A(56)6, A(57)7</span></div>
+          <div class="cell pos bu"><span class="value specific">A(56)6-A(58)8; A566</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A55X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">A55K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">A5(5X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">A5(5K)</span></div>
+          <div class="cell pos bu"><span class="value specific">Exclude A5(59)</span></div>
+        </div>
+      </div>
+
+      <!-- 23 Hands -->
+      <div class="table-wrapper" id="tab-23">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell lj">UTG</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(2P)(3P)</div>
+          <div class="cell pos lj"><span class="value specific">JJ+</span></div>
+          <div class="cell pos hj"><span class="value specific">44,55,TT+</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">2(3P)P</div>
+          <div class="cell pos lj"><span class="value specific">QQ+</span></div>
+          <div class="cell pos hj"><span class="value specific">QQ+</span></div>
+          <div class="cell pos co"><span class="value specific">44,55,TT+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(23)PP</div>
+          <div class="cell pos lj"><span class="value specific">KK</span></div>
+          <div class="cell pos hj"><span class="value specific">QQ+</span></div>
+          <div class="cell pos co"><span class="value specific">44, JJ+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23PP</div>
+          <div class="cell pos lj"><span class="value specific">KK</span></div>
+          <div class="cell pos hj"><span class="value specific">KK</span></div>
+          <div class="cell pos co"><span class="value specific">QQ+</span></div>
+          <div class="cell pos bu"><span class="value specific">44-66, TT+</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23BB DS</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value all">ALL</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(BB)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(23)BB</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23BB</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">234X DS</div>
+          <div class="cell pos lj"><span class="value specific">5</span></div>
+          <div class="cell pos hj"><span class="value specific">5,6,Q,K</span></div>
+          <div class="cell pos co"><span class="value specific">5,6,7,T-K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(4X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">5,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">234X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">5,6,Q,K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">235X DS</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">6, K</span></div>
+          <div class="cell pos co"><span class="value specific">6,7,J,Q,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(5X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">6,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">235X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">6,K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">236X DS</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">Q,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(6X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">236X</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value none">NONE</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">237X DS</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(7X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">238X DS</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">23(8X)</div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keyboard-hints">
+      <span><span class="key">1-5</span> Switch hands</span>
+      <span><span class="key">L H C B</span> Filter position</span>
+      <span><span class="key">A</span> All positions</span>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.table-wrapper').forEach(w => w.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    function toggleNotation() {
+      const panel = document.getElementById('notationPanel');
+      const toggle = document.querySelector('.notation-toggle');
+      panel.classList.toggle('open');
+      toggle.classList.toggle('open');
+    }
+
+    function filterPosition(pos) {
+      document.querySelectorAll('.pos-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.closest('.pos-btn').classList.add('active');
+
+      if (pos === 'all') {
+        document.body.classList.remove('single-pos');
+        document.querySelectorAll('.cell.pos').forEach(cell => cell.classList.remove('visible'));
+      } else {
+        document.body.classList.add('single-pos');
+        document.querySelectorAll('.cell.pos').forEach(cell => {
+          cell.classList.remove('visible');
+          if (cell.classList.contains(pos)) {
+            cell.classList.add('visible');
+          }
+        });
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+
+      const tabs = ['a2', 'a3', 'a4', 'a5', '23'];
+      if (e.key >= '1' && e.key <= '5') {
+        const tabBtns = document.querySelectorAll('.tab');
+        tabBtns.forEach(t => t.classList.remove('active'));
+        tabBtns[parseInt(e.key) - 1].classList.add('active');
+        document.querySelectorAll('.table-wrapper').forEach(w => w.classList.remove('active'));
+        document.getElementById('tab-' + tabs[parseInt(e.key) - 1]).classList.add('active');
+      }
+
+      const posMap = { 'l': 'lj', 'h': 'hj', 'c': 'co', 'b': 'bu', 'a': 'all' };
+      if (posMap[e.key.toLowerCase()]) {
+        const pos = posMap[e.key.toLowerCase()];
+        document.querySelectorAll('.pos-btn').forEach(btn => btn.classList.remove('active'));
+
+        if (pos === 'all') {
+          document.querySelector('.pos-btn.lj').classList.add('active');
+          document.body.classList.remove('single-pos');
+          document.querySelectorAll('.cell.pos').forEach(cell => cell.classList.remove('visible'));
+        } else {
+          document.querySelector(`.pos-btn.${pos}:not(:first-child), .pos-btn.${pos}`).classList.add('active');
+          document.body.classList.add('single-pos');
+          document.querySelectorAll('.cell.pos').forEach(cell => {
+            cell.classList.remove('visible');
+            if (cell.classList.contains(pos)) cell.classList.add('visible');
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
