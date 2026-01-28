@@ -139,6 +139,69 @@
       color: var(--text-secondary);
     }
 
+    /* Search Box */
+    .search-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    #searchInput {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #searchInput:focus {
+      border-color: var(--accent);
+    }
+
+    #searchInput::placeholder {
+      color: var(--text-muted);
+    }
+
+    .clear-btn {
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      transition: all 0.15s;
+    }
+
+    .clear-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+
+    .row.hidden {
+      display: none !important;
+    }
+
+    .highlight {
+      background: rgba(250, 204, 21, 0.3);
+      padding: 1px 3px;
+      border-radius: 3px;
+    }
+
+    .no-results {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
     /* Notation Toggle */
     .notation-toggle {
       display: inline-flex;
@@ -614,6 +677,12 @@
           </svg>
           Notation Guide
         </button>
+      </div>
+
+      <!-- Search Box -->
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search hands... (press / to focus)">
+        <button class="clear-btn" onclick="clearSearch()">Clear</button>
       </div>
 
       <div class="notation-panel" id="notationPanel">
@@ -1219,6 +1288,7 @@
     </div>
 
     <div class="keyboard-hints">
+      <span><span class="key">/</span> Search</span>
       <span><span class="key">1-5</span> Switch hands</span>
       <span><span class="key">L H C B</span> Filter position</span>
       <span><span class="key">A</span> All positions</span>
@@ -1258,8 +1328,90 @@
       }
     }
 
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+
+    function clearSearch() {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.focus();
+    }
+
+    function performSearch(query) {
+      const allRows = document.querySelectorAll('.table-wrapper .row:not(.header)');
+
+      // Remove existing highlights
+      document.querySelectorAll('.highlight').forEach(el => {
+        el.outerHTML = el.innerHTML;
+      });
+
+      if (!query.trim()) {
+        // Show everything
+        allRows.forEach(row => row.classList.remove('hidden'));
+        return;
+      }
+
+      const lowerQuery = query.toLowerCase();
+
+      allRows.forEach(row => {
+        const handTypeCell = row.querySelector('.cell.hand-type');
+        const allCells = row.querySelectorAll('.cell');
+        let rowText = '';
+        allCells.forEach(cell => rowText += ' ' + cell.textContent);
+
+        if (rowText.toLowerCase().includes(lowerQuery)) {
+          row.classList.remove('hidden');
+          // Highlight in hand type cell
+          if (handTypeCell && handTypeCell.textContent.toLowerCase().includes(lowerQuery)) {
+            highlightText(handTypeCell, query);
+          }
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    }
+
+    function highlightText(element, query) {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+      const textNodes = [];
+
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+
+      textNodes.forEach(node => {
+        if (regex.test(node.textContent)) {
+          const span = document.createElement('span');
+          span.innerHTML = node.textContent.replace(regex, '<span class="highlight">$1</span>');
+          node.parentNode.replaceChild(span, node);
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      performSearch(e.target.value);
+    });
+
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
+      // Handle search input separately
+      if (document.activeElement === searchInput) {
+        if (e.key === 'Escape') {
+          clearSearch();
+          searchInput.blur();
+        }
+        return;
+      }
+
+      // Focus search on /
+      if (e.key === '/') {
+        e.preventDefault();
+        searchInput.focus();
+        return;
+      }
+
       if (e.target.tagName === 'INPUT') return;
 
       const tabs = ['a2', 'a3', 'a4', 'a5', '23'];
