@@ -394,7 +394,7 @@
 
     <div class="search-container">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search: AA, KK, A23, 567, flush... (press / to focus)">
+        <input type="text" id="searchInput" placeholder="Type any hand: K84, A23, JJ5, QT9... (press / to focus)">
         <button class="clear-btn" onclick="clearSearch()">Clear</button>
       </div>
     </div>
@@ -795,89 +795,192 @@
       searchInput.focus();
     }
 
-    // Poker notation mappings
-    const notationMap = {
-      // Pairs
-      'aa': ['aces', 'two aces', 'pair'],
-      'kk': ['kings', 'king', 'high pair'],
-      'qq': ['queens', 'queen', 'high pair'],
-      'jj': ['jacks', 'jack', 'tens', 'nines'],
-      'tt': ['tens', 'jacks', 'nines'],
-      '99': ['nines', 'jacks', 'tens'],
-      '88': ['low pair', 'small pair', 'pair'],
-      '77': ['low pair', 'small pair', 'pair'],
-      '66': ['low pair', 'small pair', 'pair'],
-      '55': ['low pair', 'small pair', 'pair'],
-      '44': ['low pair', 'small pair', 'pair'],
-      '33': ['low pair', 'small pair', 'pair', 'trips'],
-      '22': ['low pair', 'small pair', 'pair'],
-      // Wheel cards with ace
-      'a23': ['wheel', 'three wheel', 'low card', 'ace'],
-      'a24': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
-      'a25': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
-      'a34': ['wheel', 'three wheel', 'low card', 'ace'],
-      'a35': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
-      'a45': ['wheel', 'three wheel', 'low card', 'ace'],
-      // Zero gappers
-      '234': ['zero gapper', 'wheel', 'low card', 'straight'],
-      '345': ['zero gapper', 'wheel', 'low card', 'straight'],
-      '456': ['zero gapper', 'low card', 'straight'],
-      '567': ['zero gapper', 'low card', 'straight', '5-6-7'],
-      '678': ['zero gapper', 'low card', 'straight', '6-7-8'],
-      // One gappers
-      '246': ['one gapper', 'gapper', 'low'],
-      '357': ['one gapper', 'gapper', 'low'],
-      '468': ['one gapper', 'gapper', 'low'],
-      // Higher combos
-      'a2': ['wheel', 'ace', 'low'],
-      'a3': ['wheel', 'ace', 'low', 'three to a six'],
-      'a4': ['wheel', 'ace', 'low'],
-      'a5': ['wheel', 'ace', 'low'],
-      // Flush
-      'flush': ['flush', 'suited', 'three flush'],
-      'suited': ['flush', 'suited', 'three flush', 'suit'],
-      // Other
-      'trips': ['trips', 'three of a kind'],
-      'steal': ['steal', 'stealing'],
-      'razz': ['razz', 'low'],
-    };
+    // Hand analyzer - categorizes any 3-card Stud 8 hand
+    function parseHand(input) {
+      const clean = input.toUpperCase().replace(/[^A2-9TJQK]/g, '');
+      const rankMap = { 'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10 };
+
+      const cards = [];
+      for (const c of clean) {
+        const val = rankMap[c] || parseInt(c);
+        if (val) cards.push(val);
+      }
+
+      return cards.slice(0, 3).sort((a, b) => a - b);
+    }
+
+    function analyzeHand(cards) {
+      if (cards.length < 3) return null;
+
+      const [c1, c2, c3] = cards;
+      const hasAce = cards.includes(14);
+      const lowCards = cards.filter(c => c <= 8 || c === 14); // A-8 (ace counts as low)
+      const highCards = cards.filter(c => c >= 9 && c <= 13); // 9-K
+
+      // Check for pair or trips
+      const isPair = c1 === c2 || c2 === c3 || c1 === c3;
+      const isTrips = c1 === c2 && c2 === c3;
+
+      let pairRank = null;
+      let kicker = null;
+      if (isPair && !isTrips) {
+        if (c1 === c2) { pairRank = c1; kicker = c3; }
+        else if (c2 === c3) { pairRank = c2; kicker = c1; }
+        else { pairRank = c1; kicker = c2; }
+      }
+
+      // Calculate gaps for low cards (treating ace as 1)
+      const lowVals = cards.map(c => c === 14 ? 1 : c).filter(c => c <= 8).sort((a,b) => a - b);
+      let totalGap = 0;
+      if (lowVals.length >= 2) {
+        for (let i = 1; i < lowVals.length; i++) {
+          totalGap += (lowVals[i] - lowVals[i-1] - 1);
+        }
+      }
+
+      return {
+        cards,
+        hasAce,
+        lowCards,
+        highCards,
+        isPair,
+        isTrips,
+        pairRank,
+        kicker,
+        lowVals,
+        totalGap,
+        isAllLow: lowCards.length === 3,
+        hasWheel: hasAce && lowVals.filter(v => v <= 5).length >= 2,
+        highestCard: c3
+      };
+    }
+
+    function getHandCategory(analysis) {
+      if (!analysis) return [];
+
+      const { hasAce, isPair, isTrips, pairRank, kicker, isAllLow, totalGap, highCards, lowCards, hasWheel, highestCard } = analysis;
+
+      // TRIPS - Almost Always
+      if (isTrips) {
+        return ['trips'];
+      }
+
+      // PAIRED HANDS
+      if (isPair) {
+        // Two Aces - Almost Always
+        if (pairRank === 14) {
+          return ['aces', 'two aces'];
+        }
+        // Kings/Queens - Often
+        if (pairRank === 13 || pairRank === 12) {
+          return ['kings', 'queens', 'high pair'];
+        }
+        // Jacks/Tens/Nines - Sometimes
+        if (pairRank >= 9 && pairRank <= 11) {
+          return ['jacks', 'tens', 'nines'];
+        }
+        // Low pair with Ace kicker - Often
+        if (pairRank <= 8 && kicker === 14) {
+          return ['low pair', 'ace', 'low pair w/ ace'];
+        }
+        // Low pair with low kicker - Sometimes
+        if (pairRank <= 8 && kicker <= 8) {
+          return ['low pair', 'low kicker', 'small pair'];
+        }
+        // Low pair with high kicker - Sometimes
+        if (pairRank <= 8) {
+          return ['low pair', 'higher kicker', 'small pair'];
+        }
+      }
+
+      // UNPAIRED HANDS
+
+      // 3 low cards with ace
+      if (hasAce && isAllLow) {
+        // Wheel cards (A + two cards 2-5)
+        if (hasWheel) {
+          if (totalGap === 0) return ['wheel', 'three wheel', 'zero gapper', 'ace'];
+          if (totalGap === 1) return ['wheel', 'one gapper', 'ace'];
+          return ['wheel', 'two gapper', 'ace'];
+        }
+        // Three to a 6 with Ace
+        if (analysis.lowVals.every(v => v <= 6)) {
+          return ['three to a six', 'ace', 'three to a 6'];
+        }
+        // Three to a 7 with Ace
+        if (analysis.lowVals.every(v => v <= 7)) {
+          return ['three to a 7', 'seven', 'ace'];
+        }
+        // Eight with Ace
+        return ['eight', 'ace', 'three to a 8'];
+      }
+
+      // 3 low cards no ace
+      if (isAllLow && !hasAce) {
+        if (totalGap === 0) return ['zero gapper', 'straight', 'low'];
+        if (totalGap === 1) return ['one gapper', 'gapper', 'low'];
+        return ['two gapper', 'gapper', 'low'];
+      }
+
+      // 2 low cards + 1 high (flush draw territory)
+      if (lowCards.length === 2 && highCards.length === 1) {
+        return ['flush', 'two low', 'flush draw'];
+      }
+
+      // 1 low card + 2 high (weak flush draw)
+      if (lowCards.length === 1 && highCards.length === 2) {
+        return ['flush', 'high cards', 'flush draw'];
+      }
+
+      // All high cards
+      if (highCards.length === 3) {
+        return ['flush', 'high cards', 'three flush'];
+      }
+
+      // Razz-type hands (all low, no ace, poor structure)
+      if (isAllLow && totalGap >= 3) {
+        return ['razz', 'razz low'];
+      }
+
+      return ['steal', 'marginal'];
+    }
 
     function expandNotation(query) {
       const clean = query.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      // Check direct mapping
-      if (notationMap[clean]) {
-        return [query, ...notationMap[clean]];
+      // Try to parse as a hand
+      const cards = parseHand(query);
+      if (cards.length >= 3) {
+        const analysis = analyzeHand(cards);
+        const categories = getHandCategory(analysis);
+        if (categories.length > 0) {
+          return [query, ...categories];
+        }
       }
 
-      // Check for pair notation (e.g., "KK", "88")
-      if (/^([akqjt2-9])\1$/i.test(clean)) {
-        const rank = clean[0].toLowerCase();
-        const rankNames = {
-          'a': 'aces', 'k': 'kings', 'q': 'queens', 'j': 'jacks',
-          't': 'tens', '9': 'nines', '8': 'low pair', '7': 'low pair',
-          '6': 'low pair', '5': 'low pair', '4': 'low pair', '3': 'low pair', '2': 'low pair'
-        };
-        return [query, rankNames[rank] || 'pair', 'pair'];
+      // Also check for 2-card partial inputs
+      if (cards.length === 2) {
+        if (cards.includes(14)) return [query, 'ace', 'wheel'];
+        if (cards[0] === cards[1]) return [query, 'pair'];
       }
 
-      // Check for three card combos with ace (e.g., "A23", "A45")
-      if (/^a[2-8]{2}$/i.test(clean)) {
-        const cards = clean.slice(1).split('').map(Number).sort((a,b) => a-b);
-        const gap = cards[1] - cards[0];
-        if (gap === 1) return [query, 'wheel', 'zero gapper', 'ace', 'low'];
-        if (gap === 2) return [query, 'wheel', 'one gapper', 'ace', 'low'];
-        return [query, 'wheel', 'two gapper', 'ace', 'low'];
-      }
+      // Keyword mappings for text searches
+      const keywords = {
+        'flush': ['flush', 'suited', 'three flush'],
+        'suited': ['flush', 'suited', 'three flush', 'suit'],
+        'trips': ['trips', 'three of a kind'],
+        'steal': ['steal', 'stealing'],
+        'razz': ['razz', 'low'],
+        'wheel': ['wheel', 'three wheel'],
+        'gapper': ['gapper', 'zero gapper', 'one gapper', 'two gapper'],
+        'multiway': ['multiway', 'multi-way'],
+        'heads': ['heads up', 'shorthanded'],
+        'fold': ['fold', 'should fold'],
+        'reraise': ['reraise', 'raise'],
+      };
 
-      // Check for three low cards (e.g., "234", "567")
-      if (/^[2-8]{3}$/i.test(clean)) {
-        const cards = clean.split('').map(Number).sort((a,b) => a-b);
-        const gap1 = cards[1] - cards[0];
-        const gap2 = cards[2] - cards[1];
-        if (gap1 === 1 && gap2 === 1) return [query, 'zero gapper', 'straight', 'low'];
-        if (gap1 <= 2 && gap2 <= 2) return [query, 'one gapper', 'gapper', 'low'];
-        return [query, 'two gapper', 'gapper', 'low'];
+      if (keywords[clean]) {
+        return [query, ...keywords[clean]];
       }
 
       return [query];
