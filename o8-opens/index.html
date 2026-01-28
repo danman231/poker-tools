@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>O8 Six-Max Opens</title>
+  <title>O8 Opening Ranges</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -595,7 +595,7 @@
     /* Responsive */
     @media (max-width: 900px) {
       .row {
-        grid-template-columns: minmax(140px, 1fr) repeat(4, 1fr);
+        grid-template-columns: minmax(140px, 1fr) repeat(7, 1fr);
       }
 
       .cell {
@@ -644,7 +644,7 @@
       }
 
       .row {
-        grid-template-columns: minmax(100px, 1fr) repeat(4, 1fr);
+        grid-template-columns: minmax(100px, 1fr) repeat(7, 1fr);
       }
 
       .cell.hand-type {
@@ -672,7 +672,7 @@
         <div class="logo-icon">O8</div>
         <div>
           <h1>Opening Ranges</h1>
-          <p class="subtitle">Six-Max Low-Oriented</p>
+          <p class="subtitle">Full Ring Low-Oriented</p>
         </div>
       </div>
 
@@ -1173,13 +1173,19 @@
       <div class="table-wrapper" id="tab-a5">
         <div class="row header">
           <div class="cell hand-type">Hand Type</div>
-          <div class="cell pos header-cell lj">UTG</div>
+          <div class="cell pos header-cell utg">UTG</div>
+          <div class="cell pos header-cell utg1">UTG+1</div>
+          <div class="cell pos header-cell utg2">UTG+2</div>
+          <div class="cell pos header-cell lj">LJ</div>
           <div class="cell pos header-cell hj">HJ</div>
           <div class="cell pos header-cell co">CO</div>
           <div class="cell pos header-cell bu">BU</div>
         </div>
         <div class="row">
           <div class="cell hand-type">(A5)BB or DS</div>
+          <div class="cell pos utg"><span class="value specific">ALL DS, (A5)KQ</span></div>
+          <div class="cell pos utg1"><span class="value specific">ALL DS, (A5)KQ</span></div>
+          <div class="cell pos utg2"><span class="value specific">ALL DS, (A5)KQ</span></div>
           <div class="cell pos lj"><span class="value specific">ALL DS, (A5)KQ</span></div>
           <div class="cell pos hj"><span class="value all">ALL</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1187,6 +1193,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A(5B)B</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value specific">KQ</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1194,6 +1203,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A5BB</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">KQ</span></div>
@@ -1201,6 +1213,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">DS Unpaired</div>
+          <div class="cell pos utg"><span class="value specific">(A5)(X w/ Q,K)</span></div>
+          <div class="cell pos utg1"><span class="value specific">(A5)(X w/ Q,K)</span></div>
+          <div class="cell pos utg2"><span class="value specific">(A5)(X w/ Q,K)</span></div>
           <div class="cell pos lj"><span class="value specific">(A5)(X w/ J,Q,K)</span></div>
           <div class="cell pos hj"><span class="value all">ALL</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1208,6 +1223,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">Suited Ace Unpaired</div>
+          <div class="cell pos utg"><span class="value specific">(A5)6K</span></div>
+          <div class="cell pos utg1"><span class="value specific">(A5)6K</span></div>
+          <div class="cell pos utg2"><span class="value specific">(A5)6K</span></div>
           <div class="cell pos lj"><span class="value specific">(A5)6K</span></div>
           <div class="cell pos hj"><span class="value specific">(A5)6Q+, (A5)7J+</span></div>
           <div class="cell pos co"><span class="value specific">ALL (A5)XX Except 68-89</span></div>
@@ -1215,6 +1233,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">Other Suit Unpaired</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value specific">A5(6Q+), A5(7K), A(56)K</span></div>
           <div class="cell pos co"><span class="value specific">A5(6J+), A5(7Q+), A(56)J+</span></div>
@@ -1222,6 +1243,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">No Suits Unpaired</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">A56K</span></div>
@@ -1229,6 +1253,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A5PP w/ Suited Ace or DS</div>
+          <div class="cell pos utg"><span class="value specific">(AJ)(5J)+, (A5)QQ+</span></div>
+          <div class="cell pos utg1"><span class="value specific">(AJ)(5J)+, (A5)QQ+</span></div>
+          <div class="cell pos utg2"><span class="value specific">(AJ)(5J)+, (A5)QQ+</span></div>
           <div class="cell pos lj"><span class="value specific">(AT)(5T)+, (A5)JJ+</span></div>
           <div class="cell pos hj"><span class="value specific">ALL DS, (A5)TT+</span></div>
           <div class="cell pos co"><span class="value specific">ALL Except (A5)77-99</span></div>
@@ -1236,6 +1263,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A5 99+</div>
+          <div class="cell pos utg"><span class="value specific">A(5K)K</span></div>
+          <div class="cell pos utg1"><span class="value specific">A(5K)K</span></div>
+          <div class="cell pos utg2"><span class="value specific">A(5K)K</span></div>
           <div class="cell pos lj"><span class="value specific">A(5Q)Q+, A5KK</span></div>
           <div class="cell pos hj"><span class="value specific">A(5J)J+, A5QQ+</span></div>
           <div class="cell pos co"><span class="value specific">(A5T)T+, A5JJ+</span></div>
@@ -1243,6 +1273,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A5 Small Pair</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">A(56)6, A(57)7</span></div>
@@ -1250,6 +1283,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A55X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1257,6 +1293,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">A5(5X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">A5(5K)</span></div>
@@ -1268,13 +1307,19 @@
       <div class="table-wrapper" id="tab-23">
         <div class="row header">
           <div class="cell hand-type">Hand Type</div>
-          <div class="cell pos header-cell lj">UTG</div>
+          <div class="cell pos header-cell utg">UTG</div>
+          <div class="cell pos header-cell utg1">UTG+1</div>
+          <div class="cell pos header-cell utg2">UTG+2</div>
+          <div class="cell pos header-cell lj">LJ</div>
           <div class="cell pos header-cell hj">HJ</div>
           <div class="cell pos header-cell co">CO</div>
           <div class="cell pos header-cell bu">BU</div>
         </div>
         <div class="row">
           <div class="cell hand-type">(2P)(3P)</div>
+          <div class="cell pos utg"><span class="value specific">QQ+</span></div>
+          <div class="cell pos utg1"><span class="value specific">QQ+</span></div>
+          <div class="cell pos utg2"><span class="value specific">QQ+</span></div>
           <div class="cell pos lj"><span class="value specific">JJ+</span></div>
           <div class="cell pos hj"><span class="value specific">44,55,TT+</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1282,6 +1327,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">2(3P)P</div>
+          <div class="cell pos utg"><span class="value specific">KK+</span></div>
+          <div class="cell pos utg1"><span class="value specific">KK+</span></div>
+          <div class="cell pos utg2"><span class="value specific">KK+</span></div>
           <div class="cell pos lj"><span class="value specific">QQ+</span></div>
           <div class="cell pos hj"><span class="value specific">QQ+</span></div>
           <div class="cell pos co"><span class="value specific">44,55,TT+</span></div>
@@ -1289,6 +1337,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">(23)PP</div>
+          <div class="cell pos utg"><span class="value specific">AA</span></div>
+          <div class="cell pos utg1"><span class="value specific">AA</span></div>
+          <div class="cell pos utg2"><span class="value specific">AA</span></div>
           <div class="cell pos lj"><span class="value specific">KK</span></div>
           <div class="cell pos hj"><span class="value specific">QQ+</span></div>
           <div class="cell pos co"><span class="value specific">44, JJ+</span></div>
@@ -1296,6 +1347,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23PP</div>
+          <div class="cell pos utg"><span class="value specific">AA</span></div>
+          <div class="cell pos utg1"><span class="value specific">AA</span></div>
+          <div class="cell pos utg2"><span class="value specific">AA</span></div>
           <div class="cell pos lj"><span class="value specific">KK</span></div>
           <div class="cell pos hj"><span class="value specific">KK</span></div>
           <div class="cell pos co"><span class="value specific">QQ+</span></div>
@@ -1303,6 +1357,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23BB DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value all">ALL</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1310,6 +1367,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(BB)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value all">ALL</span></div>
@@ -1317,6 +1377,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">(23)BB</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1324,6 +1387,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23BB</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1331,6 +1397,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">234X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value specific">5</span></div>
           <div class="cell pos hj"><span class="value specific">5,6,Q,K</span></div>
           <div class="cell pos co"><span class="value specific">5,6,7,T-K</span></div>
@@ -1338,6 +1407,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(4X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">5,K</span></div>
@@ -1345,6 +1417,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">234X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1352,6 +1427,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">235X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value specific">6, K</span></div>
           <div class="cell pos co"><span class="value specific">6,7,J,Q,K</span></div>
@@ -1359,6 +1437,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(5X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">6,K</span></div>
@@ -1366,6 +1447,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">235X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1373,6 +1457,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">236X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value specific">Q,K</span></div>
@@ -1380,6 +1467,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(6X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1387,6 +1477,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">236X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1394,6 +1487,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">237X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1401,6 +1497,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(7X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1408,6 +1507,9 @@
         </div>
         <div class="row">
           <div class="cell hand-type">238X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
@@ -1415,10 +1517,207 @@
         </div>
         <div class="row">
           <div class="cell hand-type">23(8X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
           <div class="cell pos lj"><span class="value none">NONE</span></div>
           <div class="cell pos hj"><span class="value none">NONE</span></div>
           <div class="cell pos co"><span class="value none">NONE</span></div>
           <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+      </div>
+
+      <!-- 24 Hands -->
+      <div class="table-wrapper" id="tab-24">
+        <div class="row header">
+          <div class="cell hand-type">Hand Type</div>
+          <div class="cell pos header-cell utg">UTG</div>
+          <div class="cell pos header-cell utg1">UTG+1</div>
+          <div class="cell pos header-cell utg2">UTG+2</div>
+          <div class="cell pos header-cell lj">LJ</div>
+          <div class="cell pos header-cell hj">HJ</div>
+          <div class="cell pos header-cell co">CO</div>
+          <div class="cell pos header-cell bu">BU</div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(2P)(4P)</div>
+          <div class="cell pos utg"><span class="value specific">KK+</span></div>
+          <div class="cell pos utg1"><span class="value specific">KK+</span></div>
+          <div class="cell pos utg2"><span class="value specific">KK+</span></div>
+          <div class="cell pos lj"><span class="value specific">QQ+</span></div>
+          <div class="cell pos hj"><span class="value specific">55,JJ+</span></div>
+          <div class="cell pos co"><span class="value specific">44-55,TT+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">2(4P)P</div>
+          <div class="cell pos utg"><span class="value specific">AA</span></div>
+          <div class="cell pos utg1"><span class="value specific">AA</span></div>
+          <div class="cell pos utg2"><span class="value specific">AA</span></div>
+          <div class="cell pos lj"><span class="value specific">KK+</span></div>
+          <div class="cell pos hj"><span class="value specific">KK+</span></div>
+          <div class="cell pos co"><span class="value specific">55,JJ+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(24)PP</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value specific">AA</span></div>
+          <div class="cell pos hj"><span class="value specific">KK+</span></div>
+          <div class="cell pos co"><span class="value specific">55, QQ+</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24PP</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value specific">AA</span></div>
+          <div class="cell pos hj"><span class="value specific">AA</span></div>
+          <div class="cell pos co"><span class="value specific">KK+</span></div>
+          <div class="cell pos bu"><span class="value specific">55-66, JJ+</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24BB DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">KQ,KJ,QJ</span></div>
+          <div class="cell pos co"><span class="value all">ALL</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24(BB)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">KQ,KJ,QJ</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">(24)BB</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">KQ,KJ,QJ</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24BB</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">KQ,KJ,QJ</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">245X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value specific">6,K</span></div>
+          <div class="cell pos co"><span class="value specific">6,7,Q,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24(5X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">6,K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">245X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">6,K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">246X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value specific">K</span></div>
+          <div class="cell pos bu"><span class="value all">ALL</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24(6X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">246X</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value none">NONE</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">247X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24(7X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value none">NONE</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">248X DS</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value specific">K</span></div>
+        </div>
+        <div class="row">
+          <div class="cell hand-type">24(8X)</div>
+          <div class="cell pos utg"><span class="value none">NONE</span></div>
+          <div class="cell pos utg1"><span class="value none">NONE</span></div>
+          <div class="cell pos utg2"><span class="value none">NONE</span></div>
+          <div class="cell pos lj"><span class="value none">NONE</span></div>
+          <div class="cell pos hj"><span class="value none">NONE</span></div>
+          <div class="cell pos co"><span class="value none">NONE</span></div>
+          <div class="cell pos bu"><span class="value none">NONE</span></div>
         </div>
       </div>
     </div>
@@ -1550,8 +1849,8 @@
 
       if (e.target.tagName === 'INPUT') return;
 
-      const tabs = ['a2', 'a3', 'a4', 'a5', '23'];
-      if (e.key >= '1' && e.key <= '5') {
+      const tabs = ['a2', 'a3', 'a4', 'a5', '23', '24'];
+      if (e.key >= '1' && e.key <= '6') {
         const tabBtns = document.querySelectorAll('.tab');
         tabBtns.forEach(t => t.classList.remove('active'));
         tabBtns[parseInt(e.key) - 1].classList.add('active');
@@ -1559,7 +1858,7 @@
         document.getElementById('tab-' + tabs[parseInt(e.key) - 1]).classList.add('active');
       }
 
-      const posMap = { 'l': 'lj', 'h': 'hj', 'c': 'co', 'b': 'bu', 'a': 'all' };
+      const posMap = { 'u': 'utg', 'l': 'lj', 'h': 'hj', 'c': 'co', 'b': 'bu', 'a': 'all' };
       if (posMap[e.key.toLowerCase()]) {
         const pos = posMap[e.key.toLowerCase()];
         document.querySelectorAll('.pos-btn').forEach(btn => btn.classList.remove('active'));

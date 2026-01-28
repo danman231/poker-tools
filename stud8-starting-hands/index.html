@@ -393,7 +393,7 @@
 
     <div class="search-container">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Type any hand: K84, A23, JJ5, QT9... (press / to focus)">
+        <input type="text" id="searchInput" placeholder="Type any hand: Ah2s3s, K84, JJh5d... (press / to focus)">
         <button class="clear-btn" onclick="clearSearch()">Clear</button>
       </div>
     </div>
@@ -402,19 +402,19 @@
       <button class="nav-chip always" onclick="scrollToHand('trips')">Trips</button>
       <button class="nav-chip always" onclick="scrollToHand('aces')">Aces</button>
       <button class="nav-chip always" onclick="scrollToHand('suited-low')">3 Suited Low</button>
-      <button class="nav-chip always" onclick="scrollToHand('wheel-ace')">Wheel w/ Ace</button>
-      <button class="nav-chip always" onclick="scrollToHand('zero-gap')">Zero Gappers</button>
-      <button class="nav-chip always" onclick="scrollToHand('three-six')">3 to a 6</button>
-      <button class="nav-chip often" onclick="scrollToHand('one-gap')">One Gappers</button>
-      <button class="nav-chip often" onclick="scrollToHand('three-seven')">3 to a 7/8</button>
-      <button class="nav-chip often" onclick="scrollToHand('kings')">Kings/Queens</button>
-      <button class="nav-chip often" onclick="scrollToHand('low-pair-ace')">Low Pair + Ace</button>
-      <button class="nav-chip often" onclick="scrollToHand('flush-low')">Flush + 2 Low</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('two-gap')">Two Gappers</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-low')">Low Pair + Low</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('flush-high')">Flush + High</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('jacks')">Jacks/Tens/9s</button>
-      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-high')">Low Pair + High</button>
+      <button class="nav-chip always" onclick="scrollToHand('wheel-ace')">Wheel + Ace</button>
+      <button class="nav-chip always" onclick="scrollToHand('zero-gap')">5-6-7 / 6-7-8</button>
+      <button class="nav-chip always" onclick="scrollToHand('three-six')">A-3-6 / A-4-6</button>
+      <button class="nav-chip often" onclick="scrollToHand('one-gap')">3-5-6 / 4-6-7</button>
+      <button class="nav-chip often" onclick="scrollToHand('three-seven')">A-4-7 / A-5-8</button>
+      <button class="nav-chip often" onclick="scrollToHand('kings')">KK / QQ</button>
+      <button class="nav-chip often" onclick="scrollToHand('low-pair-ace')">Low Pair + A Kicker</button>
+      <button class="nav-chip often" onclick="scrollToHand('flush-low')">Flush Draw + 2 Low</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('two-gap')">2-4-6 / 3-5-8</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-low')">Low Pair + Low Kicker</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('flush-high')">Flush Draw + High Cards</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('jacks')">JJ / TT / 99</button>
+      <button class="nav-chip sometimes" onclick="scrollToHand('low-pair-high')">Low Pair + High Kicker</button>
       <button class="nav-chip sometimes" onclick="scrollToHand('razz')">Razz Lows</button>
       <button class="nav-chip sometimes" onclick="scrollToHand('steal')">Steals</button>
     </div>
@@ -805,26 +805,58 @@
     }
 
     // Hand analyzer - categorizes any 3-card Stud 8 hand
+    // Supports: "Ah2s3s", "Ah 2s 3s", "A2s3", "K84" (no suits = unknown)
     function parseHand(input) {
-      const clean = input.toUpperCase().replace(/[^A2-9TJQK]/g, '');
       const rankMap = { 'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10 };
+      const suitChars = ['H', 'D', 'C', 'S']; // hearts, diamonds, clubs, spades
+
+      // Normalize input
+      const clean = input.toUpperCase().replace(/[^A2-9TJQKHDCS]/g, '');
 
       const cards = [];
-      for (const c of clean) {
-        const val = rankMap[c] || parseInt(c);
-        if (val) cards.push(val);
+      let i = 0;
+      while (i < clean.length && cards.length < 3) {
+        const char = clean[i];
+        const rank = rankMap[char] || (char >= '2' && char <= '9' ? parseInt(char) : null);
+
+        if (rank) {
+          // Check if next char is a suit
+          const nextChar = clean[i + 1];
+          const suit = suitChars.includes(nextChar) ? nextChar : null;
+          cards.push({ rank, suit });
+          i += suit ? 2 : 1;
+        } else {
+          i++;
+        }
       }
 
-      return cards.slice(0, 3).sort((a, b) => a - b);
+      return cards;
     }
 
     function analyzeHand(cards) {
       if (cards.length < 3) return null;
 
-      const [c1, c2, c3] = cards;
-      const hasAce = cards.includes(14);
-      const lowCards = cards.filter(c => c <= 8 || c === 14); // A-8 (ace counts as low)
-      const highCards = cards.filter(c => c >= 9 && c <= 13); // 9-K
+      const ranks = cards.map(c => c.rank).sort((a, b) => a - b);
+      const suits = cards.map(c => c.suit).filter(s => s !== null);
+
+      const [c1, c2, c3] = ranks;
+      const hasAce = ranks.includes(14);
+      const lowCards = ranks.filter(c => c <= 8 || c === 14); // A-8 (ace counts as low)
+      const highCards = ranks.filter(c => c >= 9 && c <= 13); // 9-K
+
+      // Analyze suits
+      let suitedness = 'unknown';
+      if (suits.length === 3) {
+        if (suits[0] === suits[1] && suits[1] === suits[2]) {
+          suitedness = 'three-flush';
+        } else if (suits[0] === suits[1] || suits[1] === suits[2] || suits[0] === suits[2]) {
+          suitedness = 'two-flush';
+        } else {
+          suitedness = 'rainbow';
+        }
+      } else if (suits.length === 2) {
+        suitedness = suits[0] === suits[1] ? 'two-flush' : 'rainbow';
+      }
 
       // Check for pair or trips
       const isPair = c1 === c2 || c2 === c3 || c1 === c3;
@@ -839,7 +871,7 @@
       }
 
       // Calculate gaps for low cards (treating ace as 1)
-      const lowVals = cards.map(c => c === 14 ? 1 : c).filter(c => c <= 8).sort((a,b) => a - b);
+      const lowVals = ranks.map(c => c === 14 ? 1 : c).filter(c => c <= 8).sort((a,b) => a - b);
       let totalGap = 0;
       if (lowVals.length >= 2) {
         for (let i = 1; i < lowVals.length; i++) {
@@ -848,7 +880,7 @@
       }
 
       return {
-        cards,
+        ranks,
         hasAce,
         lowCards,
         highCards,
@@ -860,98 +892,109 @@
         totalGap,
         isAllLow: lowCards.length === 3,
         hasWheel: hasAce && lowVals.filter(v => v <= 5).length >= 2,
-        highestCard: c3
+        highestCard: c3,
+        suitedness // 'three-flush', 'two-flush', 'rainbow', or 'unknown'
       };
     }
 
     function getHandCategory(analysis) {
       if (!analysis) return [];
 
-      const { hasAce, isPair, isTrips, pairRank, kicker, isAllLow, totalGap, highCards, lowCards, hasWheel, highestCard } = analysis;
+      const { hasAce, isPair, isTrips, pairRank, kicker, isAllLow, totalGap, highCards, lowCards, hasWheel, highestCard, suitedness } = analysis;
+
+      // Add suit-based terms
+      const suitTerms = [];
+      if (suitedness === 'three-flush') {
+        suitTerms.push('three flush', 'suited', 'flush');
+      } else if (suitedness === 'two-flush') {
+        suitTerms.push('two flush', 'suited', 'flush');
+      } else if (suitedness === 'rainbow') {
+        suitTerms.push('rainbow');
+      }
+
+      let categories = [];
 
       // TRIPS - Almost Always
       if (isTrips) {
-        return ['trips'];
+        categories = ['trips'];
       }
-
       // PAIRED HANDS
-      if (isPair) {
+      else if (isPair) {
         // Two Aces - Almost Always
         if (pairRank === 14) {
-          return ['aces', 'two aces'];
+          categories = ['aces', 'two aces'];
         }
         // Kings/Queens - Often
-        if (pairRank === 13 || pairRank === 12) {
-          return ['kings', 'queens', 'high pair'];
+        else if (pairRank === 13 || pairRank === 12) {
+          categories = ['kings', 'queens', 'high pair'];
         }
         // Jacks/Tens/Nines - Sometimes
-        if (pairRank >= 9 && pairRank <= 11) {
-          return ['jacks', 'tens', 'nines'];
+        else if (pairRank >= 9 && pairRank <= 11) {
+          categories = ['jacks', 'tens', 'nines'];
         }
         // Low pair with Ace kicker - Often
-        if (pairRank <= 8 && kicker === 14) {
-          return ['low pair', 'ace', 'low pair w/ ace'];
+        else if (pairRank <= 8 && kicker === 14) {
+          categories = ['low pair', 'ace', 'low pair w/ ace'];
         }
         // Low pair with low kicker - Sometimes
-        if (pairRank <= 8 && kicker <= 8) {
-          return ['low pair', 'low kicker', 'small pair'];
+        else if (pairRank <= 8 && kicker <= 8) {
+          categories = ['low pair', 'low kicker', 'small pair'];
         }
         // Low pair with high kicker - Sometimes
-        if (pairRank <= 8) {
-          return ['low pair', 'higher kicker', 'small pair'];
+        else if (pairRank <= 8) {
+          categories = ['low pair', 'higher kicker', 'small pair'];
         }
       }
-
       // UNPAIRED HANDS
-
       // 3 low cards with ace
-      if (hasAce && isAllLow) {
+      else if (hasAce && isAllLow) {
         // Wheel cards (A + two cards 2-5)
         if (hasWheel) {
-          if (totalGap === 0) return ['wheel', 'three wheel', 'zero gapper', 'ace'];
-          if (totalGap === 1) return ['wheel', 'one gapper', 'ace'];
-          return ['wheel', 'two gapper', 'ace'];
+          if (totalGap === 0) categories = ['wheel', 'three wheel', 'zero gapper', 'ace', 'suited low'];
+          else if (totalGap === 1) categories = ['wheel', 'one gapper', 'ace', 'suited low'];
+          else categories = ['wheel', 'two gapper', 'ace'];
         }
         // Three to a 6 with Ace
-        if (analysis.lowVals.every(v => v <= 6)) {
-          return ['three to a six', 'ace', 'three to a 6'];
+        else if (analysis.lowVals.every(v => v <= 6)) {
+          categories = ['three to a six', 'ace', 'three to a 6', 'suited low'];
         }
         // Three to a 7 with Ace
-        if (analysis.lowVals.every(v => v <= 7)) {
-          return ['three to a 7', 'seven', 'ace'];
+        else if (analysis.lowVals.every(v => v <= 7)) {
+          categories = ['three to a 7', 'seven', 'ace'];
         }
         // Eight with Ace
-        return ['eight', 'ace', 'three to a 8'];
+        else {
+          categories = ['eight', 'ace', 'three to a 8'];
+        }
       }
-
       // 3 low cards no ace
-      if (isAllLow && !hasAce) {
-        if (totalGap === 0) return ['zero gapper', 'straight', 'low'];
-        if (totalGap === 1) return ['one gapper', 'gapper', 'low'];
-        return ['two gapper', 'gapper', 'low'];
+      else if (isAllLow && !hasAce) {
+        if (totalGap === 0) categories = ['zero gapper', 'straight', 'low', 'suited low'];
+        else if (totalGap === 1) categories = ['one gapper', 'gapper', 'low'];
+        else categories = ['two gapper', 'gapper', 'low'];
       }
-
       // 2 low cards + 1 high (flush draw territory)
-      if (lowCards.length === 2 && highCards.length === 1) {
-        return ['flush', 'two low', 'flush draw'];
+      else if (lowCards.length === 2 && highCards.length === 1) {
+        categories = ['flush', 'two low', 'flush draw'];
       }
-
       // 1 low card + 2 high (weak flush draw)
-      if (lowCards.length === 1 && highCards.length === 2) {
-        return ['flush', 'high cards', 'flush draw'];
+      else if (lowCards.length === 1 && highCards.length === 2) {
+        categories = ['flush', 'high cards', 'flush draw'];
       }
-
       // All high cards
-      if (highCards.length === 3) {
-        return ['flush', 'high cards', 'three flush'];
+      else if (highCards.length === 3) {
+        categories = ['flush', 'high cards', 'three flush'];
       }
-
       // Razz-type hands (all low, no ace, poor structure)
-      if (isAllLow && totalGap >= 3) {
-        return ['razz', 'razz low'];
+      else if (isAllLow && totalGap >= 3) {
+        categories = ['razz', 'razz low'];
+      }
+      else {
+        categories = ['steal', 'marginal'];
       }
 
-      return ['steal', 'marginal'];
+      // Combine with suit terms
+      return [...categories, ...suitTerms];
     }
 
     function expandNotation(query) {
