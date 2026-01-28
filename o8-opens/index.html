@@ -23,6 +23,12 @@
       --accent: #60a5fa;
       --accent-dim: #3b82f6;
 
+      --pos-utg: #94a3b8;
+      --pos-utg-bg: rgba(148, 163, 184, 0.1);
+      --pos-utg1: #94a3b8;
+      --pos-utg1-bg: rgba(148, 163, 184, 0.1);
+      --pos-utg2: #94a3b8;
+      --pos-utg2-bg: rgba(148, 163, 184, 0.1);
       --pos-lj: #60a5fa;
       --pos-lj-bg: rgba(96, 165, 250, 0.1);
       --pos-hj: #a78bfa;
@@ -365,6 +371,9 @@
       letter-spacing: 0.05em;
     }
 
+    .pos-btn.utg .label { color: var(--pos-utg); }
+    .pos-btn.utg1 .label { color: var(--pos-utg1); }
+    .pos-btn.utg2 .label { color: var(--pos-utg2); }
     .pos-btn.lj .label { color: var(--pos-lj); }
     .pos-btn.hj .label { color: var(--pos-hj); }
     .pos-btn.co .label { color: var(--pos-co); }
@@ -430,7 +439,7 @@
     /* Rows */
     .row {
       display: grid;
-      grid-template-columns: minmax(200px, 1.5fr) repeat(4, 1fr);
+      grid-template-columns: minmax(200px, 1.5fr) repeat(7, 1fr);
       border-bottom: 1px solid var(--border);
       transition: background 0.1s ease;
     }
@@ -483,11 +492,17 @@
     }
 
     /* Position column backgrounds */
+    .cell.pos.utg { background: var(--pos-utg-bg); }
+    .cell.pos.utg1 { background: var(--pos-utg1-bg); }
+    .cell.pos.utg2 { background: var(--pos-utg2-bg); }
     .cell.pos.lj { background: var(--pos-lj-bg); }
     .cell.pos.hj { background: var(--pos-hj-bg); }
     .cell.pos.co { background: var(--pos-co-bg); }
     .cell.pos.bu { background: var(--pos-bu-bg); }
 
+    .row:hover .cell.pos.utg { background: rgba(148, 163, 184, 0.18); }
+    .row:hover .cell.pos.utg1 { background: rgba(148, 163, 184, 0.18); }
+    .row:hover .cell.pos.utg2 { background: rgba(148, 163, 184, 0.18); }
     .row:hover .cell.pos.lj { background: rgba(96, 165, 250, 0.18); }
     .row:hover .cell.pos.hj { background: rgba(167, 139, 250, 0.18); }
     .row:hover .cell.pos.co { background: rgba(244, 114, 182, 0.18); }
@@ -503,6 +518,9 @@
       justify-content: center;
     }
 
+    .cell.header-cell.utg { color: var(--pos-utg); }
+    .cell.header-cell.utg1 { color: var(--pos-utg1); }
+    .cell.header-cell.utg2 { color: var(--pos-utg2); }
     .cell.header-cell.lj { color: var(--pos-lj); }
     .cell.header-cell.hj { color: var(--pos-hj); }
     .cell.header-cell.co { color: var(--pos-co); }
@@ -748,6 +766,18 @@
       <button class="pos-btn lj active" onclick="filterPosition('all')">
         <span class="label">All</span>
         <span class="desc">Positions</span>
+      </button>
+      <button class="pos-btn utg" onclick="filterPosition('utg')">
+        <span class="label">UTG</span>
+        <span class="desc">Under Gun</span>
+      </button>
+      <button class="pos-btn utg1" onclick="filterPosition('utg1')">
+        <span class="label">UTG+1</span>
+        <span class="desc">UTG+1</span>
+      </button>
+      <button class="pos-btn utg2" onclick="filterPosition('utg2')">
+        <span class="label">UTG+2</span>
+        <span class="desc">UTG+2</span>
       </button>
       <button class="pos-btn lj" onclick="filterPosition('lj')">
         <span class="label">LJ</span>
