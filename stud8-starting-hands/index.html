@@ -394,7 +394,7 @@
 
     <div class="search-container">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search hands, situations, advice... (press / to focus)">
+        <input type="text" id="searchInput" placeholder="Search: AA, KK, A23, 567, flush... (press / to focus)">
         <button class="clear-btn" onclick="clearSearch()">Clear</button>
       </div>
     </div>
@@ -795,6 +795,94 @@
       searchInput.focus();
     }
 
+    // Poker notation mappings
+    const notationMap = {
+      // Pairs
+      'aa': ['aces', 'two aces', 'pair'],
+      'kk': ['kings', 'king', 'high pair'],
+      'qq': ['queens', 'queen', 'high pair'],
+      'jj': ['jacks', 'jack', 'tens', 'nines'],
+      'tt': ['tens', 'jacks', 'nines'],
+      '99': ['nines', 'jacks', 'tens'],
+      '88': ['low pair', 'small pair', 'pair'],
+      '77': ['low pair', 'small pair', 'pair'],
+      '66': ['low pair', 'small pair', 'pair'],
+      '55': ['low pair', 'small pair', 'pair'],
+      '44': ['low pair', 'small pair', 'pair'],
+      '33': ['low pair', 'small pair', 'pair', 'trips'],
+      '22': ['low pair', 'small pair', 'pair'],
+      // Wheel cards with ace
+      'a23': ['wheel', 'three wheel', 'low card', 'ace'],
+      'a24': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
+      'a25': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
+      'a34': ['wheel', 'three wheel', 'low card', 'ace'],
+      'a35': ['wheel', 'three wheel', 'low card', 'ace', 'gapper'],
+      'a45': ['wheel', 'three wheel', 'low card', 'ace'],
+      // Zero gappers
+      '234': ['zero gapper', 'wheel', 'low card', 'straight'],
+      '345': ['zero gapper', 'wheel', 'low card', 'straight'],
+      '456': ['zero gapper', 'low card', 'straight'],
+      '567': ['zero gapper', 'low card', 'straight', '5-6-7'],
+      '678': ['zero gapper', 'low card', 'straight', '6-7-8'],
+      // One gappers
+      '246': ['one gapper', 'gapper', 'low'],
+      '357': ['one gapper', 'gapper', 'low'],
+      '468': ['one gapper', 'gapper', 'low'],
+      // Higher combos
+      'a2': ['wheel', 'ace', 'low'],
+      'a3': ['wheel', 'ace', 'low', 'three to a six'],
+      'a4': ['wheel', 'ace', 'low'],
+      'a5': ['wheel', 'ace', 'low'],
+      // Flush
+      'flush': ['flush', 'suited', 'three flush'],
+      'suited': ['flush', 'suited', 'three flush', 'suit'],
+      // Other
+      'trips': ['trips', 'three of a kind'],
+      'steal': ['steal', 'stealing'],
+      'razz': ['razz', 'low'],
+    };
+
+    function expandNotation(query) {
+      const clean = query.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      // Check direct mapping
+      if (notationMap[clean]) {
+        return [query, ...notationMap[clean]];
+      }
+
+      // Check for pair notation (e.g., "KK", "88")
+      if (/^([akqjt2-9])\1$/i.test(clean)) {
+        const rank = clean[0].toLowerCase();
+        const rankNames = {
+          'a': 'aces', 'k': 'kings', 'q': 'queens', 'j': 'jacks',
+          't': 'tens', '9': 'nines', '8': 'low pair', '7': 'low pair',
+          '6': 'low pair', '5': 'low pair', '4': 'low pair', '3': 'low pair', '2': 'low pair'
+        };
+        return [query, rankNames[rank] || 'pair', 'pair'];
+      }
+
+      // Check for three card combos with ace (e.g., "A23", "A45")
+      if (/^a[2-8]{2}$/i.test(clean)) {
+        const cards = clean.slice(1).split('').map(Number).sort((a,b) => a-b);
+        const gap = cards[1] - cards[0];
+        if (gap === 1) return [query, 'wheel', 'zero gapper', 'ace', 'low'];
+        if (gap === 2) return [query, 'wheel', 'one gapper', 'ace', 'low'];
+        return [query, 'wheel', 'two gapper', 'ace', 'low'];
+      }
+
+      // Check for three low cards (e.g., "234", "567")
+      if (/^[2-8]{3}$/i.test(clean)) {
+        const cards = clean.split('').map(Number).sort((a,b) => a-b);
+        const gap1 = cards[1] - cards[0];
+        const gap2 = cards[2] - cards[1];
+        if (gap1 === 1 && gap2 === 1) return [query, 'zero gapper', 'straight', 'low'];
+        if (gap1 <= 2 && gap2 <= 2) return [query, 'one gapper', 'gapper', 'low'];
+        return [query, 'two gapper', 'gapper', 'low'];
+      }
+
+      return [query];
+    }
+
     function performSearch(query) {
       const allHandTypes = document.querySelectorAll('.hand-type, .low-card-item');
       const allCategories = document.querySelectorAll('.category');
@@ -811,7 +899,9 @@
         return;
       }
 
-      const lowerQuery = query.toLowerCase();
+      // Expand notation to search terms
+      const searchTerms = expandNotation(query.trim());
+      const lowerTerms = searchTerms.map(t => t.toLowerCase());
 
       allCategories.forEach(category => {
         let hasMatch = false;
@@ -819,13 +909,18 @@
 
         handTypes.forEach(handType => {
           const text = handType.textContent.toLowerCase();
-          if (text.includes(lowerQuery)) {
+          // Check if any search term matches
+          const matches = lowerTerms.some(term => text.includes(term));
+
+          if (matches) {
             handType.classList.remove('hidden');
             hasMatch = true;
             category.classList.add('open');
 
-            // Highlight matches
-            highlightText(handType, query);
+            // Highlight the original query if found
+            if (text.includes(query.toLowerCase())) {
+              highlightText(handType, query);
+            }
           } else {
             handType.classList.add('hidden');
           }
