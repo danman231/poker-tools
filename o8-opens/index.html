@@ -565,6 +565,11 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    /* UTG group mode (3 UTG columns) */
+    body.utg-group .row {
+      grid-template-columns: minmax(200px, 1.5fr) repeat(3, 1fr);
+    }
+
     /* Keyboard hints */
     .keyboard-hints {
       display: flex;
@@ -708,7 +713,10 @@
           <div class="notation-section">
             <h3>Positions</h3>
             <div class="notation-grid">
-              <div class="notation-item"><code>LJ</code> <span>Lojack (UTG in 6-max)</span></div>
+              <div class="notation-item"><code>UTG</code> <span>Under the Gun</span></div>
+              <div class="notation-item"><code>UTG+1</code> <span>Under the Gun +1</span></div>
+              <div class="notation-item"><code>UTG+2</code> <span>Under the Gun +2</span></div>
+              <div class="notation-item"><code>LJ</code> <span>Lojack</span></div>
               <div class="notation-item"><code>HJ</code> <span>Hijack</span></div>
               <div class="notation-item"><code>CO</code> <span>Cutoff</span></div>
               <div class="notation-item"><code>BU</code> <span>Button</span></div>
@@ -767,17 +775,9 @@
         <span class="label">All</span>
         <span class="desc">Positions</span>
       </button>
-      <button class="pos-btn utg" onclick="filterPosition('utg')">
-        <span class="label">UTG</span>
-        <span class="desc">Under Gun</span>
-      </button>
-      <button class="pos-btn utg1" onclick="filterPosition('utg1')">
-        <span class="label">UTG+1</span>
-        <span class="desc">UTG+1</span>
-      </button>
-      <button class="pos-btn utg2" onclick="filterPosition('utg2')">
-        <span class="label">UTG+2</span>
-        <span class="desc">UTG+2</span>
+      <button class="pos-btn utg" onclick="filterPosition('utg-all')">
+        <span class="label">UTG, +1, +2</span>
+        <span class="desc">Early</span>
       </button>
       <button class="pos-btn lj" onclick="filterPosition('lj')">
         <span class="label">LJ</span>
@@ -1724,8 +1724,8 @@
 
     <div class="keyboard-hints">
       <span><span class="key">/</span> Search</span>
-      <span><span class="key">1-5</span> Switch hands</span>
-      <span><span class="key">L H C B</span> Filter position</span>
+      <span><span class="key">1-6</span> Switch hands</span>
+      <span><span class="key">U L H C B</span> Filter position</span>
       <span><span class="key">A</span> All positions</span>
     </div>
   </div>
@@ -1750,10 +1750,20 @@
       event.target.closest('.pos-btn').classList.add('active');
 
       if (pos === 'all') {
-        document.body.classList.remove('single-pos');
+        document.body.classList.remove('single-pos', 'utg-group');
         document.querySelectorAll('.cell.pos').forEach(cell => cell.classList.remove('visible'));
+      } else if (pos === 'utg-all') {
+        // Show all three UTG positions
+        document.body.classList.add('single-pos', 'utg-group');
+        document.querySelectorAll('.cell.pos').forEach(cell => {
+          cell.classList.remove('visible');
+          if (cell.classList.contains('utg') || cell.classList.contains('utg1') || cell.classList.contains('utg2')) {
+            cell.classList.add('visible');
+          }
+        });
       } else {
         document.body.classList.add('single-pos');
+        document.body.classList.remove('utg-group');
         document.querySelectorAll('.cell.pos').forEach(cell => {
           cell.classList.remove('visible');
           if (cell.classList.contains(pos)) {
@@ -1858,18 +1868,28 @@
         document.getElementById('tab-' + tabs[parseInt(e.key) - 1]).classList.add('active');
       }
 
-      const posMap = { 'u': 'utg', 'l': 'lj', 'h': 'hj', 'c': 'co', 'b': 'bu', 'a': 'all' };
+      const posMap = { 'u': 'utg-all', 'l': 'lj', 'h': 'hj', 'c': 'co', 'b': 'bu', 'a': 'all' };
       if (posMap[e.key.toLowerCase()]) {
         const pos = posMap[e.key.toLowerCase()];
         document.querySelectorAll('.pos-btn').forEach(btn => btn.classList.remove('active'));
 
         if (pos === 'all') {
           document.querySelector('.pos-btn.lj').classList.add('active');
-          document.body.classList.remove('single-pos');
+          document.body.classList.remove('single-pos', 'utg-group');
           document.querySelectorAll('.cell.pos').forEach(cell => cell.classList.remove('visible'));
+        } else if (pos === 'utg-all') {
+          document.querySelector('.pos-btn.utg').classList.add('active');
+          document.body.classList.add('single-pos', 'utg-group');
+          document.querySelectorAll('.cell.pos').forEach(cell => {
+            cell.classList.remove('visible');
+            if (cell.classList.contains('utg') || cell.classList.contains('utg1') || cell.classList.contains('utg2')) {
+              cell.classList.add('visible');
+            }
+          });
         } else {
           document.querySelector(`.pos-btn.${pos}:not(:first-child), .pos-btn.${pos}`).classList.add('active');
           document.body.classList.add('single-pos');
+          document.body.classList.remove('utg-group');
           document.querySelectorAll('.cell.pos').forEach(cell => {
             cell.classList.remove('visible');
             if (cell.classList.contains(pos)) cell.classList.add('visible');
