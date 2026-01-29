@@ -174,6 +174,26 @@
       color: var(--text-muted);
     }
 
+    .no-results {
+      display: none;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .no-results.visible {
+      display: block;
+    }
+
+    .no-results strong {
+      color: var(--text);
+    }
+
     .clear-btn {
       padding: 0.75rem 1rem;
       background: var(--surface);
@@ -718,21 +738,13 @@
         <button class="clear-btn" onclick="clearSearch()">Clear</button>
       </div>
 
+      <div class="no-results" id="noResults">
+        <strong>No matching hands found.</strong><br>
+        These charts only cover hands with qualifying low cards (A2, A3, A4, A5, 23, or 24).
+      </div>
+
       <div class="notation-panel" id="notationPanel">
         <div class="notation-content">
-          <div class="notation-section">
-            <h3>Positions</h3>
-            <div class="notation-grid">
-              <div class="notation-item"><code>UTG</code> <span>Under the Gun</span></div>
-              <div class="notation-item"><code>UTG+1</code> <span>Under the Gun +1</span></div>
-              <div class="notation-item"><code>UTG+2</code> <span>Under the Gun +2</span></div>
-              <div class="notation-item"><code>LJ</code> <span>Lojack</span></div>
-              <div class="notation-item"><code>HJ</code> <span>Hijack</span></div>
-              <div class="notation-item"><code>CO</code> <span>Cutoff</span></div>
-              <div class="notation-item"><code>BU</code> <span>Button</span></div>
-            </div>
-          </div>
-
           <div class="notation-section">
             <h3>Hand Notation</h3>
             <div class="notation-grid">
@@ -2140,6 +2152,7 @@
 
     function performSearch(query) {
       const allRows = document.querySelectorAll('.table-wrapper .row:not(.header)');
+      const noResultsEl = document.getElementById('noResults');
 
       // Remove existing highlights
       document.querySelectorAll('.highlight').forEach(el => {
@@ -2148,6 +2161,9 @@
       document.querySelectorAll('.row.matched').forEach(el => {
         el.classList.remove('matched');
       });
+
+      // Hide no-results message initially
+      noResultsEl.classList.remove('visible');
 
       if (!query.trim()) {
         allRows.forEach(row => row.classList.remove('hidden'));
@@ -2198,11 +2214,16 @@
           });
 
           return;
+        } else {
+          // Valid 4-card hand but doesn't match any chart category
+          noResultsEl.classList.add('visible');
+          return;
         }
       }
 
       // Fall back to text search
       const lowerQuery = query.toLowerCase();
+      let hasVisibleRows = false;
       allRows.forEach(row => {
         const handTypeCell = row.querySelector('.cell.hand-type');
         const allCells = row.querySelectorAll('.cell');
@@ -2211,6 +2232,7 @@
 
         if (rowText.toLowerCase().includes(lowerQuery)) {
           row.classList.remove('hidden');
+          hasVisibleRows = true;
           if (handTypeCell && handTypeCell.textContent.toLowerCase().includes(lowerQuery)) {
             highlightText(handTypeCell, query);
           }
@@ -2218,6 +2240,11 @@
           row.classList.add('hidden');
         }
       });
+
+      // Show no-results message if text search found nothing
+      if (!hasVisibleRows) {
+        noResultsEl.classList.add('visible');
+      }
     }
 
     function highlightText(element, query) {
