@@ -74,6 +74,25 @@
       margin-bottom: 2rem;
     }
 
+    .chart-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .chart-nav a {
+      background: var(--surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .chart-nav a:hover { background: var(--surface-hover); color: var(--text); border-color: var(--border-strong); }
+
     .logo {
       display: inline-flex;
       align-items: center;
@@ -703,6 +722,10 @@
 <body>
   <div class="container">
     <header>
+      <div class="chart-nav">
+        <a href="../">← Home</a>
+        <a href="../o8-opens-livingston/">Livingston O8 chart →</a>
+      </div>
       <div class="logo">
         <div class="logo-icon">O8</div>
         <div>

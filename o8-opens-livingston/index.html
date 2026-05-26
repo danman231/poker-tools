@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O8 Opening Ranges — Livingston</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #121212;
+      --bg-elevated: #1a1a1a;
+      --surface: #242424;
+      --surface-hover: #2a2a2a;
+      --border: #333;
+      --border-strong: #444;
+      --text: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+      --accent: #60a5fa;
+      --accent-dim: #3b82f6;
+      --pos-lj: #60a5fa;
+      --pos-lj-bg: rgba(96, 165, 250, 0.08);
+      --pos-hj: #a78bfa;
+      --pos-hj-bg: rgba(167, 139, 250, 0.08);
+      --pos-co: #f472b6;
+      --pos-co-bg: rgba(244, 114, 182, 0.08);
+      --pos-bu: #fb923c;
+      --pos-bu-bg: rgba(251, 146, 60, 0.08);
+      --blind-sb: #34d399;
+      --blind-sb-bg: rgba(52, 211, 153, 0.10);
+      --blind-bb: #facc15;
+      --blind-bb-bg: rgba(250, 204, 21, 0.10);
+      --ok: #4ade80;
+      --ok-bg: rgba(34, 197, 94, 0.12);
+      --no: #ef4444;
+      --no-bg: rgba(239, 68, 68, 0.08);
+      --partial: #fcd34d;
+      --partial-bg: rgba(250, 204, 21, 0.10);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 2rem 1.25rem; }
+
+    /* Header */
+    header { margin-bottom: 1.5rem; }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .logo { display: flex; align-items: center; gap: 0.75rem; }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #000;
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+    .subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.1rem; }
+    .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .nav-link {
+      background: var(--surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { background: var(--surface-hover); color: var(--text); border-color: var(--border-strong); }
+
+    /* Legend bar */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; }
+    .legend-badge {
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .legend-badge.all { background: var(--ok-bg); color: var(--ok); }
+    .legend-badge.partial { background: var(--partial-bg); color: var(--partial); }
+    .legend-badge.none { background: var(--no-bg); color: var(--no); }
+    .legend-text { color: var(--text-secondary); }
+    .notation-toggle {
+      margin-left: auto;
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+    .notation-toggle:hover { background: var(--surface-hover); color: var(--text); }
+    .notation-toggle.open svg { transform: rotate(180deg); }
+    .notation-toggle svg { width: 14px; height: 14px; transition: transform 0.15s; }
+
+    .notation-panel {
+      display: none;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .notation-panel.open { display: block; }
+    .notation-panel h3 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      margin-top: 0.75rem;
+    }
+    .notation-panel h3:first-child { margin-top: 0; }
+    .notation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.45rem 1rem;
+    }
+    .notation-item { display: flex; gap: 0.5rem; font-size: 0.78rem; color: var(--text-secondary); }
+    .notation-item code {
+      background: var(--surface);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      flex-shrink: 0;
+      min-width: 60px;
+      text-align: center;
+    }
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.5rem 1rem;
+    }
+    .example-item { font-size: 0.78rem; color: var(--text-secondary); }
+    .example-item code {
+      background: var(--surface);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      margin-right: 0.4rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      align-items: center;
+      background: var(--bg-elevated);
+      padding: 0.35rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .tab {
+      background: transparent;
+      color: var(--text-secondary);
+      border: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab:hover { background: var(--surface); color: var(--text); }
+    .tab.active { background: var(--accent); color: #000; }
+    .tab.blind-sb.active { background: var(--blind-sb); color: #000; }
+    .tab.blind-bb.active { background: var(--blind-bb); color: #000; }
+    .tab-divider {
+      width: 1px;
+      background: var(--border);
+      margin: 0.35rem 0.35rem;
+      align-self: stretch;
+    }
+    .tab-group-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 0.4rem;
+    }
+
+    /* Opening grid */
+    .chart {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .chart-row:last-child { border-bottom: none; }
+    .chart-row.header {
+      background: var(--surface);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .chart-cell {
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      border-right: 1px solid var(--border);
+    }
+    .chart-cell:last-child { border-right: none; }
+    .chart-cell.label {
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .chart-cell.label .sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+    .chart-row.header .chart-cell { padding: 0.6rem 1rem; }
+    .pos-lj { color: var(--pos-lj); }
+    .pos-hj { color: var(--pos-hj); }
+    .pos-co { color: var(--pos-co); }
+    .pos-bu { color: var(--pos-bu); }
+    .bg-lj { background: var(--pos-lj-bg); }
+    .bg-hj { background: var(--pos-hj-bg); }
+    .bg-co { background: var(--pos-co-bg); }
+    .bg-bu { background: var(--pos-bu-bg); }
+
+    .freq {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .freq.all { background: var(--ok-bg); color: var(--ok); }
+    .freq.partial { background: var(--partial-bg); color: var(--partial); }
+    .freq.none { background: var(--no-bg); color: var(--no); }
+    .freq.unstated { background: var(--surface); color: var(--text-muted); border: 1px dashed var(--border-strong); }
+    .cell-rule { color: var(--text-secondary); font-size: 0.75rem; line-height: 1.35; }
+    .cell-rule.muted { color: var(--text-muted); font-style: italic; }
+    .cell-examples {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      margin-top: 0.25rem;
+      line-height: 1.4;
+    }
+    .none-dash {
+      color: var(--no);
+      font-family: 'DM Mono', monospace;
+      font-size: 1.25rem;
+      opacity: 0.5;
+    }
+
+    /* Blind tab (scenario-row table) */
+    .blind-table {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .blind-row {
+      display: grid;
+      grid-template-columns: 200px 100px 1fr 1.5fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .blind-row:last-child { border-bottom: none; }
+    .blind-row.header {
+      background: var(--surface);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .blind-cell {
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      border-right: 1px solid var(--border);
+    }
+    .blind-cell:last-child { border-right: none; }
+    .blind-cell.scenario {
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface);
+    }
+    .blind-cell .examples-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .blind-row.header .blind-cell { padding: 0.6rem 1rem; }
+
+    /* Footer cards */
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .note-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .note-card h3 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .note-card p, .note-card li {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .note-card ul { padding-left: 1rem; }
+    .note-card li { margin: 0.25rem 0; }
+    .note-card .ex { font-family: 'DM Mono', monospace; color: var(--text); font-size: 0.75rem; }
+    .note-card blockquote {
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.55;
+      padding-left: 0.7rem;
+      border-left: 2px solid var(--border-strong);
+    }
+
+    /* Attribution footer */
+    .attribution {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 720px) {
+      .container { padding: 1rem 0.75rem; }
+      .chart-row { grid-template-columns: 110px 1fr 1fr 1fr 1fr; }
+      .chart-cell { padding: 0.6rem 0.5rem; font-size: 0.75rem; }
+      .blind-row { grid-template-columns: 110px 70px 1fr 1.2fr; }
+      .blind-cell { padding: 0.6rem 0.5rem; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="top-bar">
+        <div class="logo">
+          <div class="logo-icon">O8</div>
+          <div>
+            <h1>Opening Ranges — Livingston</h1>
+            <p class="subtitle">7-handed. Source: Alex Livingston, Master Mixed Game.</p>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="../">← Home</a>
+          <a class="nav-link" href="../o8-opens/">Other O8 chart →</a>
+        </nav>
+      </div>
+
+      <div class="legend-bar">
+        <div class="legend-item">
+          <span class="legend-badge all">OPEN</span>
+          <span class="legend-text">Open every combo</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-badge partial">85%</span>
+          <span class="legend-text">Open most, fold examples shown</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-badge none">FOLD</span>
+          <span class="legend-text">Don't open first-in</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-badge" style="background: var(--surface); color: var(--text-muted); border: 1px dashed var(--border-strong); padding: 0.15rem 0.45rem; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 600;">—</span>
+          <span class="legend-text">Not addressed by source</span>
+        </div>
+        <button class="notation-toggle" id="notationToggle" onclick="toggleNotation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          Notation
+        </button>
+      </div>
+
+      <div class="notation-panel" id="notationPanel">
+        <h3>Livingston Notation</h3>
+        <div class="notation-grid">
+          <div class="notation-item"><code>ss</code> <span>Single-suited</span></div>
+          <div class="notation-item"><code>ds</code> <span>Double-suited</span></div>
+          <div class="notation-item"><code>rainbow</code> <span>All four suits different</span></div>
+          <div class="notation-item"><code>$W$W / W</code> <span>Wheel card (A, 2, 3, 4, 5)</span></div>
+          <div class="notation-item"><code>:xx</code> <span>Single-suited modifier (one extra suited card)</span></div>
+          <div class="notation-item"><code>:xxyy</code> <span>Double-suited modifier (two suit pairs)</span></div>
+          <div class="notation-item"><code>:Kxx</code> <span>K + single-suit + extra card</span></div>
+          <div class="notation-item"><code>!</code> <span>"Not" prefix (e.g. !ss = not single-suited)</span></div>
+        </div>
+
+        <h3>Examples From Livingston's Slides</h3>
+        <div class="examples-grid">
+          <div class="example-item"><code>KKQQss</code> <span>KK + QQ single-suited — premium high-only open.</span></div>
+          <div class="example-item"><code>KQJTds</code> <span>Broadway run, double-suited — top high-only opener.</span></div>
+          <div class="example-item"><code>KK:$W$W</code> <span>KK with two wheel cards — always opens.</span></div>
+          <div class="example-item"><code>QQ43ss</code> <span>Pocket queens + 4-3, single-suited — LJ open.</span></div>
+          <div class="example-item"><code>KQ32:Kxx</code> <span>KQ32 with the K suited to one of the side cards.</span></div>
+          <div class="example-item"><code>Axx!xyy!(AA,2,3,4,5)</code> <span>Ace-x single-suit, not double-suited, with no AA pair and no second wheel card.</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div id="root"></div>
+
+    <div class="attribution">
+      Source content from Alex Livingston's <em>Master Mixed Game</em> — videos 01, 02, 03 (Omaha-8 preflop). Cells contain only Livingston's verbatim guidance and named example hands.
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // CONTENT — opening rows
+    // ============================================================
+    const ACE_ROWS = [
+      { label: 'AA', sub: 'any 4-card w/ pocket aces',
+        lj: { freq: 'all', freqLabel: 'OPEN', rule: 'Always open — S-tier monster.' },
+        hj: { freq: 'all', freqLabel: 'OPEN', rule: 'Always open.' },
+        co: { freq: 'all', freqLabel: 'OPEN', rule: 'Always open.' },
+        bu: { freq: 'all', freqLabel: 'OPEN', rule: 'Always open.' },
+      },
+      { label: 'A2', sub: 'no AA',
+        lj: { freq: 'all', freqLabel: 'OPEN',
+          rule: 'All A2 open. The weakest A2 may be folded up front in 8/9-handed games (Livingston, video 03).' },
+        hj: { freq: 'all', freqLabel: 'OPEN', rule: 'All A2 open.' },
+        co: { freq: 'all', freqLabel: 'OPEN', rule: 'All A2 open.' },
+        bu: { freq: 'all', freqLabel: 'OPEN', rule: 'All A2 open.' },
+      },
+      { label: 'A3', sub: 'no AA, no A2',
+        lj: { freq: 'partial', freqLabel: '90-95%',
+          rule: 'Almost all A3. Fold the bottom: paired side card + rainbow + middling high card.',
+          examples: 'Fold: A339 rainbow, A3T8 rainbow' },
+        hj: { freq: 'partial', freqLabel: '98%',
+          rule: 'Virtually all A3.' },
+        co: { freq: 'all', freqLabel: 'OPEN',
+          rule: 'All A3. Even marginal ones — card removal helps.' },
+        bu: { freq: 'all', freqLabel: 'OPEN', rule: 'All A3.' },
+      },
+      { label: 'A4 / A5', sub: 'no AA, no A2, no A3',
+        lj: { freq: 'partial', freqLabel: '80-85%',
+          rule: 'Open with nut suit or decent side cards. Domination risk from A2/A3 behind.' },
+        hj: { freq: 'partial', freqLabel: '93%',
+          rule: 'Open most. Domination risk less acute.' },
+        co: { freq: 'all', freqLabel: 'OPEN',
+          rule: 'Nearly all — even weak ones. Card removal + steal value.' },
+        bu: { freq: 'all', freqLabel: 'OPEN', rule: 'All A4 / A5.' },
+      },
+      { label: 'A6', sub: 'no lower wheel card',
+        lj: { freq: 'none', freqLabel: 'FOLD', rule: 'Not strong enough first-in.' },
+        hj: { freq: 'none', freqLabel: 'FOLD', rule: 'Still fold.' },
+        co: { freq: 'partial', freqLabel: '72%',
+          rule: 'Most A6 — weak low card but ace power dominates here.' },
+        bu: { freq: 'partial', freqLabel: '84%',
+          rule: 'Most A6 — ace + position.' },
+      },
+      { label: 'A7', sub: 'no lower wheel card',
+        lj: { freq: 'none', freqLabel: 'FOLD' },
+        hj: { freq: 'none', freqLabel: 'FOLD' },
+        co: { freq: 'unstated', freqLabel: '—',
+          rule: 'Not addressed at CO. Slide jumps from "72% of A6" (CO) to "84% of A6/A7" (BTN).' },
+        bu: { freq: 'partial', freqLabel: '84%',
+          rule: 'Most A7 — ace + position.' },
+      },
+      { label: 'Ax single-suit', sub: 'no AA, no A2-A5',
+        lj: { freq: 'partial', freqLabel: '25%',
+          rule: 'About a quarter. Need structure — power of suited ace.' },
+        hj: { freq: 'partial', freqLabel: '50%',
+          rule: 'About half open.',
+          examples: 'Ex: AJ87 single-suit opens' },
+        co: { freq: 'unstated', freqLabel: '—',
+          rule: 'AxSS specifically not given. Slide states 88% of ALL ace hands (A2-A7 + AxSS combined) open at CO.' },
+        bu: { freq: 'unstated', freqLabel: '—',
+          rule: 'AxSS specifically not addressed at BTN.' },
+      },
+    ];
+
+    const NOACE_ROWS = [
+      { label: 'Premium high pairs', sub: 'high-only pair hands',
+        lj: { freq: 'partial', freqLabel: 'BEST ONLY',
+          rule: 'KKQQ single-suited yes. JJ99 single-suited no.',
+          examples: 'OK: KKQQss  Fold: JJ99ss' },
+        hj: { freq: 'partial', freqLabel: '+ MORE',
+          rule: 'Add QQTT:xx, JJ99:xxyy.' },
+        co: { freq: 'unstated', freqLabel: '—',
+          rule: 'Not specifically addressed at CO beyond the 88% all-ace-hands figure.' },
+        bu: { freq: 'unstated', freqLabel: '—',
+          rule: 'Not specifically addressed at BTN.' },
+      },
+      { label: 'KK + wheel', sub: 'KK w/ low side cards',
+        lj: { freq: 'all', freqLabel: 'OPEN',
+          rule: 'All KK:$W$W (KK + 2 wheel cards).' },
+        hj: { freq: 'all', freqLabel: 'OPEN', rule: 'All KK + wheel.' },
+        co: { freq: 'all', freqLabel: 'OPEN', rule: 'All KK + wheel.' },
+        bu: { freq: 'all', freqLabel: 'OPEN', rule: 'All KK + wheel.' },
+      },
+      { label: 'High runs', sub: 'broadway connectors',
+        lj: { freq: 'partial', freqLabel: 'PREMIUM',
+          rule: 'Best only — KQJTds opens.',
+          examples: 'OK: KQJTds  Fold: KQJ8ds, QJT8ds (PLO traps)' },
+        hj: { freq: 'unstated', freqLabel: '—',
+          rule: 'HJ slide adds pairs (QQTT, JJ99), not connectors. Connector expansion at HJ not addressed.' },
+        co: { freq: 'unstated', freqLabel: '—',
+          rule: 'Connector expansion at CO not specifically addressed.' },
+        bu: { freq: 'partial', freqLabel: 'STILL TIGHT',
+          rule: 'Still fold QJT9ds — the key PLO trap in O8.',
+          examples: 'Fold: QJT9ds even on BTN' },
+      },
+      { label: 'KQ32 / mid pair + wheel', sub: 'big-pair/run + low cards',
+        lj: { freq: 'partial', freqLabel: 'DS ONLY',
+          rule: 'QQ43ss, KQ32ds — double-suited only first-in.',
+          examples: 'OK: QQ43ss, KQ32ds' },
+        hj: { freq: 'unstated', freqLabel: '—',
+          rule: 'Not specifically addressed at HJ.' },
+        co: { freq: 'partial', freqLabel: 'SS OK',
+          rule: 'KQ32:Kxx single-suited opens here.',
+          examples: 'OK: KQ32:Kxx' },
+        bu: { freq: 'unstated', freqLabel: '—',
+          rule: 'Not specifically addressed at BTN.' },
+      },
+      { label: 'Low + high-low runs', sub: 'no ace; low-only or hi-lo connectors',
+        lj: { freq: 'partial', freqLabel: '5432ss',
+          rule: 'Only the best low-only.',
+          examples: 'OK: 5432ss  Fold: 7653' },
+        hj: { freq: 'partial', freqLabel: '+ 7532',
+          rule: 'Add 7532-type single-suited.' },
+        co: { freq: 'partial', freqLabel: '+ 7632',
+          rule: 'Raggedy single-suit low-only OK.',
+          examples: 'OK: 7632:xx' },
+        bu: { freq: 'partial', freqLabel: '+ HI-LO',
+          rule: 'High-low connectors start to get in.',
+          examples: 'OK: JT43:xx' },
+      },
+      { label: 'Situational', sub: 'fold vs single open; play vs raise+3bet',
+        lj: { freq: 'none', freqLabel: '— vs open',
+          rule: 'Never open first-in. Plays multi-way / vs 3bet only.',
+          examples: 'TT99ss, QJT8ds' },
+        hj: { freq: 'none', freqLabel: '— vs open', rule: 'Never open first-in.' },
+        co: { freq: 'none', freqLabel: '— vs open', rule: 'Never open first-in.' },
+        bu: { freq: 'none', freqLabel: '— vs open',
+          rule: 'Still fold vs single open. Plays vs raise+3bet.',
+          examples: 'TT99ss, QJT8ds' },
+      },
+    ];
+
+    const POS_META = {
+      lj: { label: 'LJ', sub: '23%', cls: 'pos-lj' },
+      hj: { label: 'HJ', sub: '28%', cls: 'pos-hj' },
+      co: { label: 'CO', sub: '33%', cls: 'pos-co' },
+      bu: { label: 'BTN', sub: '40%', cls: 'pos-bu' },
+    };
+
+    // ============================================================
+    // SB / BB scenarios
+    // ============================================================
+    const SB_SCENARIOS = [
+      { scenario: 'Folded to me', freq: '~70%',
+        approach: 'Open similar range to BTN. Mostly raise — no big limping.',
+        examples: '' },
+      { scenario: 'Vs open (EP)', freq: '~30%',
+        approach: 'Mostly 3bet. Knocking out BB is worth a lot. Exception: flat one-way hands.',
+        examples: 'Flat: one-way hands (high-only or low-only)' },
+      { scenario: 'Vs open (LP)', freq: '~40%',
+        approach: 'Mostly 3bet. Same exception for one-way hands.',
+        examples: '' },
+      { scenario: 'Vs raise + 3bet', freq: '24%',
+        approach: 'High-only ↑ in value. Marginal 2-way ↓ — pitch weak A4/A5.',
+        examples: 'Play: KKQQss, KK+wheel. Fold: weak A4/A5.' },
+    ];
+
+    const BB_SCENARIOS = [
+      { scenario: 'Vs 1 raise', freq: '90%+',
+        approach: 'Defend super wide. "BBBL" (big-big-big-low) with no suits folds most.',
+        examples: 'Fold: KJ94ss, KQ94, QT93' },
+      { scenario: 'Vs raise + 3bet', freq: '40-45%',
+        approach: 'People overfold this. Connected high ↑. Beware pot-odds trap with junk.',
+        examples: "Play: QJT9ds (yes, even though you wouldn't open BTN with it)" },
+    ];
+
+    // ============================================================
+    // FOOTER CARDS
+    // ============================================================
+    const FOOTER_NOTES = `
+      <div class="notes">
+        <div class="note-card">
+          <h3>Never-Open Traps</h3>
+          <ul>
+            <li><span class="ex">QJT9ds</span> — PLO premium, O8 fold even BTN.</li>
+            <li><span class="ex">KQJ8ds, QJT8ds</span> — PLO openers, O8 folds.</li>
+            <li><span class="ex">KQ97, KQJ2</span> — no low, weak high.</li>
+            <li><span class="ex">9988ds</span> — nice PLO, weak O8.</li>
+            <li>Small pairs in your hand are bad — <span class="ex">AJ83 &gt; AJ33</span> (freeroll risk).</li>
+          </ul>
+        </div>
+        <div class="note-card">
+          <h3>Vs Raise + 3bet (general)</h3>
+          <ul>
+            <li>High-only hands ↑ in value (ranges share low cards).</li>
+            <li>Marginal 2-way hands ↓ — pitch weak A4/A5.</li>
+            <li>Situational hands (<span class="ex">TT99ss, QJT8ds</span>) become playable.</li>
+            <li>Defend ~24% from SB, 40-45% from BB.</li>
+          </ul>
+        </div>
+        <div class="note-card">
+          <h3>Deeper Games (8- / 9-handed)</h3>
+          <blockquote>"As you get to seven-handed, eight-handed, nine-handed, just start to be careful when you have these more marginal ace three or ace four combinations. Even some of the weaker Ace-Deuce combinations are going to be folded up front." — Livingston</blockquote>
+        </div>
+      </div>
+    `;
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    const TABS = [
+      { key: 'A2', label: 'A2', group: 'opening', kind: 'opening', rows: [ACE_ROWS[0], ACE_ROWS[1]] },
+      { key: 'A3', label: 'A3', group: 'opening', kind: 'opening', rows: [ACE_ROWS[2]] },
+      { key: 'A4-A5', label: 'A4-A5', group: 'opening', kind: 'opening', rows: [ACE_ROWS[3]] },
+      { key: 'A6', label: 'A6', group: 'opening', kind: 'opening', rows: [ACE_ROWS[4]] },
+      { key: 'A7', label: 'A7', group: 'opening', kind: 'opening', rows: [ACE_ROWS[5]] },
+      { key: 'AxSS', label: 'Ax suited', group: 'opening', kind: 'opening', rows: [ACE_ROWS[6]] },
+      { key: 'High', label: 'High-only', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[0], NOACE_ROWS[1], NOACE_ROWS[2]] },
+      { key: 'Mid', label: 'KQ32 / mid', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[3]] },
+      { key: 'Low', label: 'Low-only', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[4]] },
+      { key: 'Sit', label: 'Situational', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[5]] },
+      { key: 'SB', label: 'SB', group: 'defending', kind: 'blind', scenarios: SB_SCENARIOS, cls: 'blind-sb' },
+      { key: 'BB', label: 'BB', group: 'defending', kind: 'blind', scenarios: BB_SCENARIOS, cls: 'blind-bb' },
+    ];
+
+    // ============================================================
+    // RENDERERS
+    // ============================================================
+    function renderCell(cell, posKey) {
+      if (!cell) return `<div class="chart-cell bg-${posKey}"><span class="none-dash">—</span></div>`;
+      const examples = cell.examples ? `<div class="cell-examples">${cell.examples}</div>` : '';
+      const rule = cell.rule ? `<div class="cell-rule">${cell.rule}</div>` : '';
+      return `<div class="chart-cell bg-${posKey}">
+        <span class="freq ${cell.freq}">${cell.freqLabel}</span>
+        ${rule}${examples}
+      </div>`;
+    }
+
+    function renderOpeningTable(rows) {
+      const header = `<div class="chart-row header">
+        <div class="chart-cell label">Hand</div>
+        ${Object.entries(POS_META).map(([k, m]) =>
+          `<div class="chart-cell ${m.cls}">${m.label} <span style="color: var(--text-muted); font-weight: 400;">${m.sub}</span></div>`
+        ).join('')}
+      </div>`;
+      const body = rows.map(r => `<div class="chart-row">
+        <div class="chart-cell label">${r.label}<span class="sub">${r.sub}</span></div>
+        ${renderCell(r.lj, 'lj')}${renderCell(r.hj, 'hj')}${renderCell(r.co, 'co')}${renderCell(r.bu, 'bu')}
+      </div>`).join('');
+      return `<div class="chart">${header}${body}</div>`;
+    }
+
+    function renderBlindTable(scenarios) {
+      const header = `<div class="blind-row header">
+        <div class="blind-cell scenario">Scenario</div>
+        <div class="blind-cell">Freq</div>
+        <div class="blind-cell">Approach</div>
+        <div class="blind-cell">Examples</div>
+      </div>`;
+      const body = scenarios.map(s => `<div class="blind-row">
+        <div class="blind-cell scenario">${s.scenario}</div>
+        <div class="blind-cell"><span class="freq partial">${s.freq}</span></div>
+        <div class="blind-cell"><div class="cell-rule">${s.approach}</div></div>
+        <div class="blind-cell"><span class="examples-text">${s.examples || '—'}</span></div>
+      </div>`).join('');
+      return `<div class="blind-table">${header}${body}</div>`;
+    }
+
+    // ============================================================
+    // SHELL
+    // ============================================================
+    function getTab() {
+      return new URLSearchParams(location.search).get('tab') || 'A2';
+    }
+    function setTab(k) {
+      const url = new URL(location);
+      url.searchParams.set('tab', k);
+      history.replaceState({}, '', url);
+      renderApp();
+    }
+    function renderTabBar(currentKey) {
+      let html = '<nav class="tabs">';
+      html += '<span class="tab-group-label">Opening</span>';
+      TABS.filter(t => t.group === 'opening').forEach(t => {
+        html += `<button class="tab ${currentKey === t.key ? 'active' : ''}" data-tab="${t.key}">${t.label}</button>`;
+      });
+      html += '<span class="tab-divider"></span>';
+      html += '<span class="tab-group-label">Defending</span>';
+      TABS.filter(t => t.group === 'defending').forEach(t => {
+        const extraCls = t.cls || '';
+        html += `<button class="tab ${extraCls} ${currentKey === t.key ? 'active' : ''}" data-tab="${t.key}">${t.label}</button>`;
+      });
+      html += '</nav>';
+      return html;
+    }
+    function renderApp() {
+      const tabKey = getTab();
+      const current = TABS.find(t => t.key === tabKey) || TABS[0];
+      const tabBar = renderTabBar(current.key);
+      let body;
+      if (current.kind === 'opening') {
+        body = renderOpeningTable(current.rows);
+      } else {
+        body = renderBlindTable(current.scenarios);
+      }
+      document.getElementById('root').innerHTML = tabBar + body + FOOTER_NOTES;
+      document.querySelectorAll('[data-tab]').forEach(b => {
+        b.onclick = () => setTab(b.dataset.tab);
+      });
+    }
+
+    function toggleNotation() {
+      document.getElementById('notationPanel').classList.toggle('open');
+      document.getElementById('notationToggle').classList.toggle('open');
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
