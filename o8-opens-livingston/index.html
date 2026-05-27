@@ -279,12 +279,22 @@
     }
 
     /* ── Chart grid (horizontal LJ → BTN) ── */
+    .chart-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      margin-bottom: 1.75rem;
+      border-radius: 14px;
+      max-width: 100%;
+    }
+
     .chart {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 1.75rem;
+      min-width: 760px;
     }
 
     .chart-row {
@@ -377,12 +387,22 @@
     }
 
     /* ── Blind tables ── */
+    .blind-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      margin-bottom: 1.75rem;
+      border-radius: 14px;
+      max-width: 100%;
+    }
+
     .blind-table {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 1.75rem;
+      min-width: 600px;
     }
 
     .blind-row {
@@ -484,16 +504,29 @@
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .container { padding: 1.5rem 1rem; }
-      .chart-row { grid-template-columns: 140px 1fr 1fr 1fr 1fr; }
-      .chart-cell { padding: 0.85rem 0.75rem; font-size: 0.9rem; }
-      .chart-cell.label { font-size: 0.95rem; }
-      .chart-cell.label .sub { font-size: 0.8rem; }
-      .cell-rule { font-size: 0.85rem; }
-      .cell-examples { font-size: 0.8rem; }
-      .blind-row { grid-template-columns: 140px 90px 1fr 1.2fr; }
-      .blind-cell { padding: 0.85rem 0.75rem; font-size: 0.9rem; }
-      h1 { font-size: 1.4rem; }
+      .container { padding: 1.25rem 0.75rem; }
+      h1 { font-size: 1.3rem; }
+      .subtitle { font-size: 0.9rem; }
+      .tabs {
+        gap: 0.2rem;
+        padding: 0.35rem;
+      }
+      .tab {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+      }
+      .tab-group-label {
+        font-size: 0.65rem;
+        padding: 0 0.3rem;
+      }
+      .tab-divider {
+        margin: 0.3rem 0.2rem;
+      }
+      .legend-bar {
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+      }
+      .legend-item { font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -774,16 +807,16 @@
     // TABS
     // ============================================================
     const TABS = [
-      { key: 'A2', label: 'A2', group: 'opening', kind: 'opening', rows: [ACE_ROWS[0], ACE_ROWS[1]] },
-      { key: 'A3', label: 'A3', group: 'opening', kind: 'opening', rows: [ACE_ROWS[2]] },
-      { key: 'A4-A5', label: 'A4-A5', group: 'opening', kind: 'opening', rows: [ACE_ROWS[3]] },
-      { key: 'A6', label: 'A6', group: 'opening', kind: 'opening', rows: [ACE_ROWS[4]] },
-      { key: 'A7', label: 'A7', group: 'opening', kind: 'opening', rows: [ACE_ROWS[5]] },
-      { key: 'AxSS', label: 'Ax suited', group: 'opening', kind: 'opening', rows: [ACE_ROWS[6]] },
-      { key: 'High', label: 'High-only', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[0], NOACE_ROWS[1], NOACE_ROWS[2]] },
-      { key: 'Mid', label: 'KQ32 / mid', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[3]] },
-      { key: 'Low', label: 'Low-only', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[4]] },
-      { key: 'Sit', label: 'Situational', group: 'opening', kind: 'opening', rows: [NOACE_ROWS[5]] },
+      { key: 'A2', label: 'A2', group: 'ace', kind: 'opening', rows: [ACE_ROWS[0], ACE_ROWS[1]] },
+      { key: 'A3', label: 'A3', group: 'ace', kind: 'opening', rows: [ACE_ROWS[2]] },
+      { key: 'A4-A5', label: 'A4-A5', group: 'ace', kind: 'opening', rows: [ACE_ROWS[3]] },
+      { key: 'A6', label: 'A6', group: 'ace', kind: 'opening', rows: [ACE_ROWS[4]] },
+      { key: 'A7', label: 'A7', group: 'ace', kind: 'opening', rows: [ACE_ROWS[5]] },
+      { key: 'AxSS', label: 'Ax suited', group: 'ace', kind: 'opening', rows: [ACE_ROWS[6]] },
+      { key: 'High', label: 'High-only', group: 'noace', kind: 'opening', rows: [NOACE_ROWS[0], NOACE_ROWS[1], NOACE_ROWS[2]] },
+      { key: 'Mid', label: 'KQ32 / mid', group: 'noace', kind: 'opening', rows: [NOACE_ROWS[3]] },
+      { key: 'Low', label: 'Low-only', group: 'noace', kind: 'opening', rows: [NOACE_ROWS[4]] },
+      { key: 'Sit', label: 'Situational', group: 'noace', kind: 'opening', rows: [NOACE_ROWS[5]] },
       { key: 'SB', label: 'SB', group: 'defending', kind: 'blind', scenarios: SB_SCENARIOS, cls: 'blind-sb' },
       { key: 'BB', label: 'BB', group: 'defending', kind: 'blind', scenarios: BB_SCENARIOS, cls: 'blind-bb' },
     ];
@@ -812,7 +845,7 @@
         <div class="chart-cell label">${r.label}<span class="sub">${r.sub}</span></div>
         ${renderCell(r.lj, 'lj')}${renderCell(r.hj, 'hj')}${renderCell(r.co, 'co')}${renderCell(r.bu, 'bu')}
       </div>`).join('');
-      return `<div class="chart">${header}${body}</div>`;
+      return `<div class="chart-scroll"><div class="chart">${header}${body}</div></div>`;
     }
 
     function renderBlindTable(scenarios) {
@@ -828,7 +861,7 @@
         <div class="blind-cell"><div class="cell-rule">${s.approach}</div></div>
         <div class="blind-cell"><span class="examples-text">${s.examples || '--'}</span></div>
       </div>`).join('');
-      return `<div class="blind-table">${header}${body}</div>`;
+      return `<div class="blind-scroll"><div class="blind-table">${header}${body}</div></div>`;
     }
 
     // ============================================================
@@ -847,12 +880,17 @@
 
     function renderTabBar(currentKey) {
       let html = '<nav class="tabs">';
-      html += '<span class="tab-group-label">Opening</span>';
-      TABS.filter(t => t.group === 'opening').forEach(t => {
+      html += '<span class="tab-group-label">Ace hands</span>';
+      TABS.filter(t => t.group === 'ace').forEach(t => {
         html += `<button class="tab ${currentKey === t.key ? 'active' : ''}" data-tab="${t.key}">${t.label}</button>`;
       });
       html += '<span class="tab-divider"></span>';
-      html += '<span class="tab-group-label">Defending</span>';
+      html += '<span class="tab-group-label">Non-ace</span>';
+      TABS.filter(t => t.group === 'noace').forEach(t => {
+        html += `<button class="tab ${currentKey === t.key ? 'active' : ''}" data-tab="${t.key}">${t.label}</button>`;
+      });
+      html += '<span class="tab-divider"></span>';
+      html += '<span class="tab-group-label">Blinds</span>';
       TABS.filter(t => t.group === 'defending').forEach(t => {
         const extraCls = t.cls || '';
         html += `<button class="tab ${extraCls} ${currentKey === t.key ? 'active' : ''}" data-tab="${t.key}">${t.label}</button>`;

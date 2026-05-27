@@ -473,7 +473,10 @@
       background: var(--surface);
       border-radius: 16px;
       border: 1px solid var(--border);
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
       box-shadow: 0 4px 24px rgba(0,0,0,0.2);
     }
 
@@ -489,6 +492,7 @@
     .row {
       display: grid;
       grid-template-columns: minmax(200px, 1.5fr) repeat(7, 1fr);
+      min-width: 920px;
       border-bottom: 1px solid var(--border);
       transition: background 0.1s ease;
     }
@@ -612,11 +616,13 @@
 
     body.single-pos .row {
       grid-template-columns: 1fr 1fr;
+      min-width: 0;
     }
 
     /* UTG group mode (3 UTG columns) */
     body.utg-group .row {
       grid-template-columns: minmax(200px, 1.5fr) repeat(3, 1fr);
+      min-width: 560px;
     }
 
     /* Keyboard hints */
@@ -650,6 +656,7 @@
     @media (max-width: 900px) {
       .row {
         grid-template-columns: minmax(140px, 1fr) repeat(7, 1fr);
+        min-width: 820px;
       }
 
       .cell {
@@ -699,6 +706,7 @@
 
       .row {
         grid-template-columns: minmax(100px, 1fr) repeat(7, 1fr);
+        min-width: 760px;
       }
 
       .cell.hand-type {
